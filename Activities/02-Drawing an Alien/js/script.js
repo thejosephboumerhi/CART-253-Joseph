@@ -45,8 +45,8 @@ ellipse (340,330,20,35);
 
 //Draws the pupils
 fill (232, 143, 0);
-arc (250,230,70,140,50,PI + QUARTER_PI, CHORD);
-arc (390,230,70,140,50,PI + QUARTER_PI, CHORD);
+arc (250,230,70,140,50, PI - 50, CHORD);
+arc (390,230,70,140,50, PI - 50, CHORD);
 
 }
 

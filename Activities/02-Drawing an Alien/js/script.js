@@ -48,6 +48,11 @@ fill (232, 143, 0);
 arc (250,230,70,140,50, PI - 50, CHORD);
 arc (390,230,70,140,50, PI - 50, CHORD);
 
+//Draws epauldrons
+fill(180, 66, 255);
+rect(200,440,75,125);
+rect(440,440,75,125);
+
 }
 
 function draw() {

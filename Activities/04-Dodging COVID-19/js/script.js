@@ -19,19 +19,23 @@ let covid19 = {
   }
 };
 
-let playeruser = {
+let user = {
   x: 250,
   y: 250,
   size: 100,
   fill: 255
 };
 
+
+let numStatic = 1000;
+
+
 // setup()
 //
 // Description of setup() goes here.
 function setup() {
 
-createCanvas (windowWidth,windowHeight);
+createCanvas (windowWidth, windowHeight);
 covid19.y = random (0, height);
 covid19.vx = covid19.speed;
 noCursor();
@@ -42,7 +46,7 @@ function draw() {
   background(0);
 
 //Display visual effects (static)
-for (let i = 0; 1 < 1000; i++) {
+for (let i = 0; i < numStatic; i++) {
   let x = random(0,width);
   let y = random(0,height);
   stroke(255);
@@ -59,12 +63,12 @@ if (covid19.x > width) {
 }
 
 //Player movement
-  playeruser.x = mouseX;
-  playeruser.y = mouseY;
+  user.x = mouseX;
+  user.y = mouseY;
 
 //Checking for Covid19
-let d = dist(playeruser.x, playeruser.y, covid19.x, covid19.y);
-if (d < covid19.size/2 + playeruser.size/2) {
+let d = dist(user.x, user.y, covid19.x, covid19.y);
+if (d < covid19.size/2 + user.size/2) {
   noLoop();
 }
 
@@ -73,6 +77,6 @@ if (d < covid19.size/2 + playeruser.size/2) {
   ellipse (covid19.x, covid19.y, covid19.size);
 
 //Display Player
-  fill (playeruser.fill);
-  ellipse (playeruser.x, playeruser.y, playeruser.size);
+  fill (user.fill);
+  ellipse (user.x, user.y, user.size);
 }

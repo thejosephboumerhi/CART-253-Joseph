@@ -1,18 +1,16 @@
 /**************************************************
-04 - Dodging COVID-19
+Exercise 02 - Dodge-Em
 Joseph Boumerhi
 
-Interactive COVID-19 simulation, fun too!
+Dodge the skull
 **************************************************/
 
-let covid19 = {
+let skull = {
   x: 0,
   y: 250,
   size: 100,
   vx: 0,
   vy: 0,
-  ax: 0,
-  ay: 0,
   speed: 5,
   fill: {
     r: 255,
@@ -35,13 +33,15 @@ let user = {
 };
 
 
-let numStatic = 1000;
+let numStatic = 750;
 let userimg;
 let cursorimg;
+let enemyimg;
 
 function preload() {
 userimg = loadImage('assets/images/Blueuser.png');
-cursorimg = loadImage('assets/images/Usercursor.png')
+cursorimg = loadImage('assets/images/Usercursor.png');
+enemyimg = loadImage('assets/images/SkullEnemy.gif');
 }
 
 
@@ -50,12 +50,12 @@ cursorimg = loadImage('assets/images/Usercursor.png')
 function setup() {
 
 createCanvas (windowWidth, windowHeight);
-covid19.y = random (0, height);
-covid19.vx = covid19.speed;
+skull.y = random (0, height);
+skull.vx = skull.speed;
 noCursor();
 }
 
-//Covid19 and User drawn
+//Skull and User drawn
 function draw() {
   background(0);
 
@@ -63,23 +63,24 @@ function draw() {
 for (let i = 0; i < numStatic; i++) {
   let x = random(0,width);
   let y = random(0,height);
-  stroke(255,0,0);
+  strokeWeight(5);
+  stroke(217, 0, 255);
   point(x,y);
 }
 
-//Covid19 movement
-  covid19.x = covid19.x + covid19.vx;
-  covid19.y = covid19.y + covid19.vy;
+//Skull movement
+  skull.x = skull.x + skull.vx;
+  skull.y = skull.y + skull.vy;
 
 
-if (covid19.x > width) {
-  covid19.x = 0;
-  covid19.y = random (0, height);
+if (skull.x > width) {
+  skull.x = 0;
+  skull.y = random (0, height);
+
 }
 
-//User movement, added acceleration to User (can't teleport)
 
-
+//User movement, added acceleration to User (won't teleport, follows instead)
   if (mouseX < user.x){
     user.ax = -user.Accel;
   }
@@ -103,16 +104,18 @@ if (covid19.x > width) {
   user.x = user.x + user.vx;
   user.y = user.y + user.vy;
 
-//Checking for Covid19
-let d = dist(user.x, user.y, covid19.x, covid19.y);
-if (d < covid19.size/2 + user.size/2) {
+//Checking for Skull
+let d = dist(user.x, user.y, skull.x, skull.y);
+if (d < skull.size/2 + user.size/2) {
   noLoop();
+
+//Display Skull
+//Checking for distance between Skull and User, for size enhance
+let proximity = int(dist(user.x, user.y, skull.x, skull.y));
+let danger = map(proximity, skull.x, 200, skull.y, 200);
+if (proximity < skull.size/2 + user.size/2) {
+  image (enemyimg, skull.x, skull.y, danger, danger);
 }
-
-//Display Covid19
-  fill (covid19.fill.r, covid19.fill.g, covid19.fill.b);
-  ellipse (covid19.x, covid19.y, covid19.size);
-
 //Display User and custom cursor
   imageMode(CENTER);
   image(userimg,user.x,user.y);

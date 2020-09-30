@@ -11,6 +11,8 @@ let covid19 = {
   size: 100,
   vx: 0,
   vy: 0,
+  ax: 0,
+  ay: 0,
   speed: 5,
   fill: {
     r: 255,
@@ -22,17 +24,26 @@ let covid19 = {
 let user = {
   x: 250,
   y: 250,
+  vx: 0,
+  vy: 0,
+  ax: 0,
+  ay: 0,
   size: 100,
   fill: 255
 };
 
 
 let numStatic = 1000;
+let userimg;
+
+function preload() {
+userimg = loadImage('assets/images/Blueuser.png');
+
+}
 
 
-// setup()
-//
-// Description of setup() goes here.
+
+//Starts simulation
 function setup() {
 
 createCanvas (windowWidth, windowHeight);
@@ -49,13 +60,14 @@ function draw() {
 for (let i = 0; i < numStatic; i++) {
   let x = random(0,width);
   let y = random(0,height);
-  stroke(255);
+  stroke(255,0,0);
   point(x,y);
 }
 
 //Covid19 movement
   covid19.x = covid19.x + covid19.vx;
   covid19.y = covid19.y + covid19.vy;
+
 
 if (covid19.x > width) {
   covid19.x = 0;
@@ -77,6 +89,7 @@ if (d < covid19.size/2 + user.size/2) {
   ellipse (covid19.x, covid19.y, covid19.size);
 
 //Display Player
-  fill (user.fill);
-  ellipse (user.x, user.y, user.size);
+  imageMode(CENTER);
+  image(userimg,user.x,user.y);
+
 }

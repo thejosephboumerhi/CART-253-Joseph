@@ -27,13 +27,16 @@ let robber = {
   ay: 0,
   accel: 0.45,
   MaxV: 5,
-  speed: 5
+  speed: 5,
+  friction: 0.89
 };
 
-let copBarrierXL = 0;
-let copBarrierXR = 500;
-let copBarrierYU = 0;
-let copBarrierYD = 500;
+let secret = {
+  x: 0,
+  y: 500,
+  size: 10,
+  fill: 0
+};
 
 //Could be title, simulation, and the endings (good and bad)
 //Remember to set it as the first state of the program as a title or menu
@@ -41,17 +44,14 @@ let state = `title`;
 
 //Setups
 function setup() {
-createCanvas(1000,650);
+createCanvas(1000,600);
 setupCircles();
 }
 
-//Setups the circles and trajectory beforehand
+//Setups police, robber at center
 function setupCircles() {
 police.x = width/3;
 robber.x = 2 * width/3;
-
-//police.vx = random(-police.speed,police.speed);
-//police.vy = random(-police.speed,police.speed);
 
 }
 
@@ -70,8 +70,9 @@ else if (state === `capture`) {
 }
 else if (state === `escape`) {
   escape();
-//else if (state === `special-conditions`)
-
+}
+else if (state === `secret`) {
+  secret_text();
   }
 }
 
@@ -88,9 +89,13 @@ function title () {
 //Simulation is called, drawn and manages other functions
 function simulation () {
   movementInput();
+  fearOfArrest();
+  aiPolice();
   checkOffScreen();
   overlap();
   display();
+  specialCondition();
+
 }
 
 function capture() {
@@ -111,15 +116,36 @@ function escape() {
   pop();
 }
 
-//The movement of the circles, P1 (Cop) = WASD, P2 (Robber)= ARROWS
-function movementInput() {
-//Movement for Cop
+function secret_text() {
+  push();
+  textSize(45);
+  fill(255,150,150);
+  textAlign(CENTER,CENTER);
+  text(`Huh? You found something shiny!`, width/2, height/2);
+  pop();
+}
 
-police.x = police.x + police.vx;
-police.y = police.y + police.vy;
+function aiPolice() {
+
+  let change = random();
+  if (change < 0.1) {
+    police.vx = random(-police.speed,police.speed);
+    police.vy = random(-police.speed,police.speed);
+  }
+
+  police.x = police.x + police.vx;
+  police.y = police.y + police.vy;
+
+  police.vx = police.ax + police.vx;
+  police.vx = constrain(police.vx,-police.MaxV,police.MaxV);
+  police.vy = police.ay + police.vy;
+  police.vy = constrain(police.vy,-police.MaxV,police.MaxV);
+}
+
+//The movement for the player Robber, uses WASD.
+function movementInput() {
 
 //Movement for Robber
-let friction = 0.89;
 if (keyIsDown(65)) {
   robber.ax = -robber.accel;
 }
@@ -139,21 +165,30 @@ else {
   robber.ay = 0;
 }
 
-// It will reduce over time the movement towards zero, allows for good movement
-robber.vx = robber.vx * friction;
-robber.vy = robber.vy * friction;
+//Pippin proposed the variable "friction", which allows for smooth WASD movement
+robber.vx = robber.vx * robber.friction;
+robber.vy = robber.vy * robber.friction;
 
+robber.x = robber.x + robber.vx;
+robber.y = robber.y + robber.vy;
 
-// Change position with velocity
-robber.x = robber.vx + robber.x;
-robber.y = robber.vy + robber.y;
-
-robber.vx = robber.vx + robber.ax;
+robber.vx = robber.ax + robber.vx;
 robber.vx = constrain(robber.vx,-robber.MaxV,robber.MaxV);
 robber.vy = robber.ay + robber.vy;
 robber.vy = constrain(robber.vy,-robber.MaxV,robber.MaxV);
+}
 
-
+//Penalizes the robber' speed for being near the police
+function fearOfArrest() {
+let fearProx = int(dist(police.x, police.y, robber.x, robber.y));
+let fearMap = map(fearProx, police.x, 200, police.y, 1000);
+fearMap = constrain(fearMap,0, 1000);
+if (fearMap > 500) {
+  robber.friction = 0.45;
+}
+else if (fearMap < 500){
+  robber.friction = 0.89;
+  }
 }
 
 //Check whether either circle is off-screen
@@ -197,7 +232,13 @@ function mousePressed() {
   if (state === `title`) {
     state = `simulation`;
   }
-  //function specialCondition(){
-    //if robber.x ===
-  //}
+}
+
+function specialCondition() {
+  let scrt = dist(robber.x, robber.y, secret.x, secret.y);
+  fill(secret.fill);
+  square(secret.x,secret.y,secret.size,alpha(0));
+  if (scrt < robber.size/2 + secret.size/2) {
+      state = `secret`;
+  }
 }

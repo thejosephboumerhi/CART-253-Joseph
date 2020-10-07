@@ -115,7 +115,7 @@ if (d < skull.size/2 + user.size/2) {
 //Checking for distance between Skull and User, for size enhancement
 let proximity = int(dist(user.x, user.y, skull.x, skull.y));
 let proximityInv = map(proximity, skull.x, windowWidth, skull.y, windowHeight);
-proximityInv = constrain(proximity, 100, 500);
+proximityInv = constrain(proximityInv, 0, 600);
 
 //When far, grow. When closer, shrink (+ it's going an idea for the project).
 if (proximityInv > 300) {

@@ -2,8 +2,7 @@
 Activity 5 - Looking For Love
 Joseph Boumerhi
 
-Simulates a "multi-player" encounter between a
-officer of justice and a criminal
+Simulates a "Cop and Robber" encounter, used A5 as template
 ***********************************************************/
 let police = {
   x: 0,
@@ -13,9 +12,9 @@ let police = {
   vy: 0,
   ax: 0,
   ay: 0,
-  accel: 0.25,
-  MaxV: 2,
-  speed: 2
+  accel: 0.45,
+  MaxV: 5,
+  speed: 5
 };
 
 let robber = {
@@ -26,10 +25,15 @@ let robber = {
   vy: 0,
   ax: 0,
   ay: 0,
-  accel: 0.25,
-  MaxV: 2,
-  speed: 2
+  accel: 0.45,
+  MaxV: 5,
+  speed: 5
 };
+
+let copBarrierXL = 0;
+let copBarrierXR = 500;
+let copBarrierYU = 0;
+let copBarrierYD = 500;
 
 //Could be title, simulation, and the endings (good and bad)
 //Remember to set it as the first state of the program as a title or menu
@@ -37,7 +41,7 @@ let state = `title`;
 
 //Setups
 function setup() {
-createCanvas(windowWidth,windowHeight);
+createCanvas(1000,650);
 setupCircles();
 }
 
@@ -45,6 +49,9 @@ setupCircles();
 function setupCircles() {
 police.x = width/3;
 robber.x = 2 * width/3;
+
+//police.vx = random(-police.speed,police.speed);
+//police.vy = random(-police.speed,police.speed);
 
 }
 
@@ -63,6 +70,7 @@ else if (state === `capture`) {
 }
 else if (state === `escape`) {
   escape();
+//else if (state === `special-conditions`)
 
   }
 }
@@ -71,7 +79,7 @@ else if (state === `escape`) {
 function title () {
   push();
   textSize(50);
-  fill(200,100,100);
+  fill(200,200,100);
   textAlign(CENTER,CENTER);
   text(`Cops and Robbers`, width/2, height/2);
   pop();
@@ -106,34 +114,12 @@ function escape() {
 //The movement of the circles, P1 (Cop) = WASD, P2 (Robber)= ARROWS
 function movementInput() {
 //Movement for Cop
-if (keyIsDown(LEFT_ARROW)) {
-  police.ax = -police.accel;
-}
-else if (keyIsDown(RIGHT_ARROW)) {
-  police.ax = police.accel;
-}
-else {
-  police.ax = 0;
-}
-if (keyIsDown(UP_ARROW)){
-  police.ay = -police.accel;
-}
-else if (keyIsDown(DOWN_ARROW)) {
-  police.ay = police.accel;
-}
-else {
-  police.ay = 0;
-}
-
-police.vx = police.vx + police.ax;
-police.vx = constrain(police.vx,-police.MaxV,police.MaxV);
-police.vy = police.ay + police.vy;
-police.vy = constrain(police.vy,-police.MaxV,police.MaxV);
 
 police.x = police.x + police.vx;
 police.y = police.y + police.vy;
 
 //Movement for Robber
+let friction = 0.89;
 if (keyIsDown(65)) {
   robber.ax = -robber.accel;
 }
@@ -153,13 +139,21 @@ else {
   robber.ay = 0;
 }
 
+// It will reduce over time the movement towards zero, allows for good movement
+robber.vx = robber.vx * friction;
+robber.vy = robber.vy * friction;
+
+
+// Change position with velocity
+robber.x = robber.vx + robber.x;
+robber.y = robber.vy + robber.y;
+
 robber.vx = robber.vx + robber.ax;
 robber.vx = constrain(robber.vx,-robber.MaxV,robber.MaxV);
 robber.vy = robber.ay + robber.vy;
 robber.vy = constrain(robber.vy,-robber.MaxV,robber.MaxV);
 
-robber.x = robber.x + robber.vx;
-robber.y = robber.y + robber.vy;
+
 }
 
 //Check whether either circle is off-screen
@@ -190,7 +184,7 @@ function overlap() {
 function display() {
 
 //Cop
-fill(0,255,0);
+fill(0,0,255);
 ellipse(police.x, police.y, police.size);
 
 //Robber
@@ -203,4 +197,7 @@ function mousePressed() {
   if (state === `title`) {
     state = `simulation`;
   }
+  //function specialCondition(){
+    //if robber.x ===
+  //}
 }

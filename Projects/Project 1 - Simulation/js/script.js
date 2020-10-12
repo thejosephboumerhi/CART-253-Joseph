@@ -31,12 +31,15 @@ let user = {
   ay: 0,
   Accel: 1,
   MaxV: 10,
+  friction:
   size: 100,
   fill: 255
 };
+//Allows for various states to be used, starting with title
+let state = `title`;
 
-//Background effect limit
-let numStatic = 750;
+//Background effect limit, bigger and lesser particles in BG
+let numClouds = 50;
 
 //Allows my images to be loaded in
 let userimg;
@@ -60,15 +63,50 @@ noCursor();
 
 //Skull and User drawn
 function draw() {
-  background(0);
+  background(0,0,255);
 
+  if (state === `title`) {
+  title();
+}
+else if (state === `simulation`) {
+  simulation();
+}
+else if (state === `death`) {
+  death();
+}
+
+
+function simulation() {
+
+}
+
+function title () {
+  push();
+  textSize(50);
+  fill(200,200,100);
+  textAlign(CENTER,CENTER);
+  text(`Aerial-Luster`, width/2, height/2);
+  pop();
+}
+
+function death() {
+  push();
+  textSize(50);
+  fill(150,150,255);
+  textAlign(CENTER,CENTER);
+  text(`Defeat!`, width/2, height/2);
+  pop();
+}
+
+function visualFX () {
 //Display visual effects (static)
 for (let i = 0; i < numStatic; i++) {
   let x = random(0,width);
   let y = random(0,height);
-  strokeWeight(5);
-  stroke(217, 0, 255);
+  strokeWeight(15);
+  stroke(155);
   point(x,y);
+  }
 }
 
 //Skull movement
@@ -82,28 +120,41 @@ if (skull.x > width) {
 
 }
 
-//User movement, added acceleration to User (won't teleport, follows instead)
-  if (mouseX < user.x){
-    user.ax = -user.Accel;
-  }
-  else {
-    user.ax = user.Accel;
-  }
+//The movement for the User, uses WASD.
+function movementInput() {
 
-  if (mouseY < user.y){
-    user.ay = -user.Accel;
-  }
-  else {
-    user.ay = user.Accel;
-  }
+//Movement for Robber
+if (keyIsDown(65)) {
+user.ax = -user.accel;
+}
+else if (keyIsDown(68)) {
+user.ax = user.accel;
+}
+else {
+user.ax = 0;
+}
+if (keyIsDown(87)) {
+user.ay = -user.accel;
+}
+else if (keyIsDown(83)) {
+user.ay = user.accel;
+}
+else {
+user.ay = 0;
+}
 
-  user.vx = user.vx + user.ax;
-  user.vx = constrain(user.vx,-user.MaxV,user.MaxV);
-  user.vy = user.ay + user.vy;
-  user.vy = constrain(user.vy,-user.MaxV,user.MaxV);
+//Pippin proposed the variable "friction", which allows for smooth WASD movement
+user.vx = user.vx * user.friction;
+user.vy = user.vy * user.friction;
 
-  user.x = user.x + user.vx;
-  user.y = user.y + user.vy;
+user.x = user.x + user.vx;
+user.y = user.y + user.vy;
+
+user.vx = user.ax + user.vx;
+user.vx = constrain(user.vx,-user.MaxV,user.MaxV);
+user.vy = user.ay + user.vy;
+user.vy = constrain(user.vy,-user.MaxV,user.MaxV);
+}
 
 //Checking for Skull
 let d = dist(user.x, user.y, skull.x, skull.y);
@@ -130,6 +181,6 @@ image (enemyimg, skull.x, skull.y, proximityInv, proximityInv);
   imageMode(CENTER);
   image(userimg,user.x,user.y);
   imageMode(CENTER);
-  image(cursorimg,mouseX,mouseY);
+  image(cursorimg,(mouseX),(mouseY + 50));
 
 }

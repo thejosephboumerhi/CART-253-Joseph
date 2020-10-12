@@ -1,272 +1,135 @@
-/***********************************************************
-Project 1 - Simulation
+/***********************************************************************
+Exercise 02 - Dodge-Em
 Joseph Boumerhi
 
-, used E3 as template
-***********************************************************/
-"use strict";
+!Glide! past the skull
+!Idea through serendipity, glide towards the obstacles, but not into it,
+will be an idea for my project!
 
-let ai_enemy = {
+************************************************************************/
+
+let skull = {
   x: 0,
   y: 250,
-  size: 100,
+  size: 400,
+  vx: 0,
+  vy: 0,
+  speed: 5,
+  fill: {
+    r: 255,
+    g: 0,
+    b: 0
+  }
+};
+
+let user = {
+  x: 250,
+  y: 250,
   vx: 0,
   vy: 0,
   ax: 0,
   ay: 0,
-  accel: 0.45,
-  MaxV: 5,
-  speed: 5,
-  alive: true
-};
-
-let bullet = {
- x: -100,
- y: -100,
- size: 10,
- vx: 0,
- vy: 0,
- speed: 20,
- fired: false
-}
-
-let player = {
-  x: 0,
-  y: 250,
+  Accel: 1,
+  MaxV: 10,
   size: 100,
-  vx: 0,
-  vy: 0,
-  ax: 0,
-  ay: 0,
-  accel: 0.45,
-  MaxV: 5,
-  speed: 5,
-  friction: 0.89,
-  alive: true
+  fill: 255
 };
 
-let cursor = {
+//Background effect limit
+let numStatic = 750;
 
-};
-
-//Could be title, game_mode, and the game-over
-//Remember to set it as the first state of the program as a title or menu
-let state = `title`;
-let cursorImg = ;
-let charPlayerImg = ;
-let enemyImg = ;
-let bulletImg = ;
-//let dashVFXImg = ;
-
+//Allows my images to be loaded in
+let userimg;
+let cursorimg;
+let enemyimg;
 
 function preload() {
-  
+userimg = loadImage('assets/images/Blueuser.png');
+cursorimg = loadImage('assets/images/Usercursor.png');
+enemyimg = loadImage('assets/images/SkullEnemy.gif');
 }
 
-//Setups
+//Starts simulation
 function setup() {
-createCanvas(1000,600);
-setupCircles();
+
+createCanvas (windowWidth, windowHeight);
+skull.y = random (0, height);
+skull.vx = skull.speed;
+noCursor();
 }
 
-//Setups police, player at center
-function setupCircles() {
-player.x = 2 * width/3;
-
-}
-
-//Calls the game_mode in draw(), and the various states (start, end)
+//Skull and User drawn
 function draw() {
   background(0);
 
-if (state === `title`) {
-  title();
+//Display visual effects (static)
+for (let i = 0; i < numStatic; i++) {
+  let x = random(0,width);
+  let y = random(0,height);
+  strokeWeight(5);
+  stroke(217, 0, 255);
+  point(x,y);
 }
-else if (state === `game_mode`) {
-  game_mode();
+
+//Skull movement
+  skull.x = skull.x + skull.vx;
+  skull.y = skull.y + skull.vy;
+
+//Skull reset location
+if (skull.x > width) {
+  skull.x = 0;
+  skull.y = random (0, height);
+
 }
-else if (state === `death`) {
-  death();
+
+//User movement, added acceleration to User (won't teleport, follows instead)
+  if (mouseX < user.x){
+    user.ax = -user.Accel;
   }
-}
-
-
-function titleMenu () {
-  push();
-  textSize(50);
-  fill(200,200,100);
-  textAlign(CENTER,CENTER);
-  text(`Eldrich Arisen`, width/2, height/2);
-  pop();
-}
-
-//Simulation is called, drawn and manages other functions
-function game_mode () {
-  movementInput();
-  aiming();
-  //criticalState();
-  ai_enemy();
-  checkBorders();
-  overlap();
-  display();
-}
-
-function death() {
-  push();
-  textSize(64);
-  fill(150,150,255);
-  textAlign(CENTER,CENTER);
-  text(`Game Over!`, width/2, height/2);
-  pop();
-}
-
-function ai_enemy() {
-
-  let change = random();
-  if (change < 0.1) {
-    ai_enemy.vx = random(-ai_enemy.speed,ai_enemy.speed);
-    ai_enemy.vy = random(-ai_enemy.speed,ai_enemy.speed);
+  else {
+    user.ax = user.Accel;
   }
 
-  ai_enemy.x = ai_enemy.x + ai_enemy.vx;
-  ai_enemy.y = ai_enemy.y + ai_enemy.vy;
-
-  ai_enemy.vx = ai_enemy.ax + ai_enemy.vx;
-  ai_enemy.vx = constrain(ai_enemy.vx,-ai_enemy.MaxV,ai_enemy.MaxV);
-  ai_enemy.vy = ai_enemy.ay + ai_enemy.vy;
-  ai_enemy.vy = constrain(ai_enemy.vy,-ai_enemy.MaxV,ai_enemy.MaxV);
-}
-
-//The movement for the player, uses WASD.
-function movementInput() {
-
-//Movement for Player
-if (keyIsDown(65)) {
-  player.ax = -player.accel;
-}
-else if (keyIsDown(68)) {
-  player.ax = player.accel;
-}
-else {
-  player.ax = 0;
-}
-if (keyIsDown(87)) {
-  player.ay = -player.accel;
-}
-else if (keyIsDown(83)) {
-  player.ay = player.accel;
-}
-else {
-  player.ay = 0;
-}
-
-//Pippin proposed the variable "friction", which allows for smooth WASD movement
-player.vx = player.vx * player.friction;
-player.vy = player.vy * player.friction;
-
-player.x = player.x + player.vx;
-player.y = player.y + player.vy;
-
-player.vx = player.ax + player.vx;
-player.vx = constrain(player.vx,-player.MaxV,player.MaxV);
-player.vy = player.ay + player.vy;
-player.vy = constrain(player.vy,-player.MaxV,player.MaxV);
-}
-
-//Gotten from class Discord (Pasted,(to be edited?))
-function aimAndfire() {
-  cursor.x = mouseX;
-  cursor.y = mouseY;
-
-  bullet.x += bullet.vx;
-  bullet.y += bullet.vy;
-
-  if (bullet.x > width) {
-    bullet.fired = false;
+  if (mouseY < user.y){
+    user.ay = -user.Accel;
+  }
+  else {
+    user.ay = user.Accel;
   }
 
-  let d = dist(bullet.x, bullet.y, enemy.x, enemy.y);
-  if (bullet.fired && enemy.active && d < bullet.size / 2 + enemy.size / 2) {
-    // Stop the bullet
-    bullet.fired = false;
-    // Kill the enemy
-    ai_enemy.alive = false;
-  }
+  user.vx = user.vx + user.ax;
+  user.vx = constrain(user.vx,-user.MaxV,user.MaxV);
+  user.vy = user.ay + user.vy;
+  user.vy = constrain(user.vy,-user.MaxV,user.MaxV);
 
-  fill(255);
-  ellipse(circle.x, circle.y, circle.size);
+  user.x = user.x + user.vx;
+  user.y = user.y + user.vy;
 
-  if (bullet.fired) {
-    ellipse(bullet.x, bullet.y, bullet.size);
-  }
-
-  if (ai_enemy.active) {
-    fill(255, 0, 0);
-    ellipse(enemy.x, enemy.y, enemy.size);
-  }
+//Checking for Skull
+let d = dist(user.x, user.y, skull.x, skull.y);
+if (d < skull.size/2 + user.size/2) {
+  noLoop();
 }
 
-function mousePressed() {
-  if (bullet.fired) {
-    return;
-  }
+//Display Skull
+//Checking for distance between Skull and User, for size enhancement
+let proximity = int(dist(user.x, user.y, skull.x, skull.y));
+let proximityInv = map(proximity, skull.x, windowWidth, skull.y, windowHeight);
+proximityInv = constrain(proximityInv, 0, 600);
 
-  bullet.fired = true;
-  bullet.x = circle.x;
-  bullet.y = circle.y;
-  bullet.vx = bullet.speed;
+//When far, grow. When closer, shrink (+ it's going an idea for the project).
+if (proximityInv > 300) {
+skull.size = 500;
+} else (proximityInv < 300)
+{
+skull.size = 100;
 }
-}
+image (enemyimg, skull.x, skull.y, proximityInv, proximityInv);
 
+//Display User and custom cursor
+  imageMode(CENTER);
+  image(userimg,user.x,user.y);
+  imageMode(CENTER);
+  image(cursorimg,mouseX,mouseY);
 
-
-//Penalizes the player's movement for having critical health
-//function criticalState() {
-//}
-
-//Check whether either circle is off-screen
-function checkBorders() {
-if  {
-
-  }
-}
-
-function isOffScreen(player) {
-  if (player.x < 0 || player.x > width || player.y < 0 || player.y > height ||
-    ai_enemy.x < 0 || ai_enemy.x > width || ai_enemy.y < 0 ||
-    ai_enemy.y > height || bullet.x < 0 || bullet.x > width || bullet.y < 0 ||
-    bullet.y > height) {
-    return true;
-  }
-    else {
-    return false;
-  }
-}
-
-//Check if circles end up overlapping
-//function overlapdamage() {
-  //let d = dist(ai_enemy.x, ai_enemy.y, player.x, player.y);
-//  if (d < ai_enemy.size/2 + player.size/2) {
-      }
-//}
-
-//Shows visuals for player units
-function display() {
-
-//Enemy
-fill(0,0,255);
-ellipse(ai_enemy.x, ai_enemy.y, ai_enemy.size);
-
-//Player
-fill(255,0,0);
-sqaure(player.x, player.y, player.size);
-rotate(mouseX);
-}
-
-//Changes the title state to the game_mode state
-function mousePressed() {
-  if (state === `title`) {
-    state = `game_mode`;
-  }
-}
 }

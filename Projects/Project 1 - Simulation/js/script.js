@@ -16,8 +16,19 @@ let ai_enemy = {
   ay: 0,
   accel: 0.45,
   MaxV: 5,
-  speed: 5
+  speed: 5,
+  alive: true
 };
+
+let bullet = {
+ x: -100,
+ y: -100,
+ size: 10,
+ vx: 0,
+ vy: 0,
+ speed: 20,
+ fired: false
+}
 
 let player = {
   x: 0,
@@ -30,12 +41,27 @@ let player = {
   accel: 0.45,
   MaxV: 5,
   speed: 5,
-  friction: 0.89
+  friction: 0.89,
+  alive: true
 };
 
-//Could be title, game_mode, and the endings (good and bad)
+let cursor = {
+
+};
+
+//Could be title, game_mode, and the game-over
 //Remember to set it as the first state of the program as a title or menu
 let state = `title`;
+let cursorImg = ;
+let charPlayerImg = ;
+let enemyImg = ;
+let bulletImg = ;
+//let dashVFXImg = ;
+
+
+function preload() {
+  
+}
 
 //Setups
 function setup() {
@@ -45,7 +71,6 @@ setupCircles();
 
 //Setups police, player at center
 function setupCircles() {
-ai_enemy.x = width/3;
 player.x = 2 * width/3;
 
 }
@@ -66,7 +91,7 @@ else if (state === `death`) {
 }
 
 
-function title () {
+function titleMenu () {
   push();
   textSize(50);
   fill(200,200,100);
@@ -86,12 +111,12 @@ function game_mode () {
   display();
 }
 
-function capture() {
+function death() {
   push();
-  textSize(50);
+  textSize(64);
   fill(150,150,255);
   textAlign(CENTER,CENTER);
-  text(`Death!`, width/2, height/2);
+  text(`Game Over!`, width/2, height/2);
   pop();
 }
 
@@ -148,10 +173,56 @@ player.vy = player.ay + player.vy;
 player.vy = constrain(player.vy,-player.MaxV,player.MaxV);
 }
 
+//Gotten from class Discord (Pasted,(to be edited?))
+function aimAndfire() {
+  cursor.x = mouseX;
+  cursor.y = mouseY;
+
+  bullet.x += bullet.vx;
+  bullet.y += bullet.vy;
+
+  if (bullet.x > width) {
+    bullet.fired = false;
+  }
+
+  let d = dist(bullet.x, bullet.y, enemy.x, enemy.y);
+  if (bullet.fired && enemy.active && d < bullet.size / 2 + enemy.size / 2) {
+    // Stop the bullet
+    bullet.fired = false;
+    // Kill the enemy
+    ai_enemy.alive = false;
+  }
+
+  fill(255);
+  ellipse(circle.x, circle.y, circle.size);
+
+  if (bullet.fired) {
+    ellipse(bullet.x, bullet.y, bullet.size);
+  }
+
+  if (ai_enemy.active) {
+    fill(255, 0, 0);
+    ellipse(enemy.x, enemy.y, enemy.size);
+  }
+}
+
+function mousePressed() {
+  if (bullet.fired) {
+    return;
+  }
+
+  bullet.fired = true;
+  bullet.x = circle.x;
+  bullet.y = circle.y;
+  bullet.vx = bullet.speed;
+}
+}
+
+
 
 //Penalizes the player's movement for having critical health
-function criticalState() {
-}
+//function criticalState() {
+//}
 
 //Check whether either circle is off-screen
 function checkBorders() {
@@ -161,7 +232,10 @@ if  {
 }
 
 function isOffScreen(player) {
-  if (player.x < 0 || player.x > width || player.y < 0 || player.y > height) {
+  if (player.x < 0 || player.x > width || player.y < 0 || player.y > height ||
+    ai_enemy.x < 0 || ai_enemy.x > width || ai_enemy.y < 0 ||
+    ai_enemy.y > height || bullet.x < 0 || bullet.x > width || bullet.y < 0 ||
+    bullet.y > height) {
     return true;
   }
     else {

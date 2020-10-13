@@ -2,13 +2,13 @@
 Exercise 02 - Dodge-Em
 Joseph Boumerhi
 
-!Glide! past the skull
+!Glide! past the EnemyShip
 !Idea through serendipity, glide towards the obstacles, but not into it,
 will be an idea for my project!
 
 ************************************************************************/
 
-let skull = {
+let enemyShip = {
   x: 0,
   y: 250,
   size: 400,
@@ -22,7 +22,7 @@ let skull = {
   }
 };
 
-let user = {
+let player = {
   x: 250,
   y: 250,
   vx: 0,
@@ -31,10 +31,11 @@ let user = {
   ay: 0,
   Accel: 1,
   MaxV: 10,
-  friction:
+  friction: 0.80,
   size: 100,
   fill: 255
 };
+
 //Allows for various states to be used, starting with title
 let state = `title`;
 
@@ -42,23 +43,22 @@ let state = `title`;
 let numClouds = 50;
 
 //Allows my images to be loaded in
-let userimg;
+let playerimg;
 let cursorimg;
 let enemyimg;
 
 function preload() {
-userimg = loadImage('assets/images/Blueuser.png');
+playerimg = loadImage('assets/images/Ship.png');
 cursorimg = loadImage('assets/images/Usercursor.png');
-enemyimg = loadImage('assets/images/SkullEnemy.gif');
+enemyimg = loadImage('assets/images/EnemyShip.png');
 }
 
 //Starts simulation
 function setup() {
 
 createCanvas (windowWidth, windowHeight);
-skull.y = random (0, height);
-skull.vx = skull.speed;
-noCursor();
+enemyShip.y = random (0, height);
+enemyShip.vx = enemyShip.speed;
 }
 
 //Skull and User drawn
@@ -77,7 +77,13 @@ else if (state === `death`) {
 
 
 function simulation() {
-
+movementInput();
+charDisplay();
+ai_Enemy();
+visualFX();
+enemyEffect();
+enemyCrash();
+mousePressed();
 }
 
 function title () {
@@ -99,8 +105,8 @@ function death() {
 }
 
 function visualFX () {
-//Display visual effects (static)
-for (let i = 0; i < numStatic; i++) {
+//Display visual effects (clouds)
+for (let i = 0; i < numClouds; i++) {
   let x = random(0,width);
   let y = random(0,height);
   strokeWeight(15);
@@ -109,15 +115,16 @@ for (let i = 0; i < numStatic; i++) {
   }
 }
 
+function ai_Enemy() {
 //Skull movement
-  skull.x = skull.x + skull.vx;
-  skull.y = skull.y + skull.vy;
+  enemyShip.x = enemyShip.x + enemyShip.vx;
+  enemyShip.y = enemyShip.y + enemyShip.vy;
 
 //Skull reset location
-if (skull.x > width) {
-  skull.x = 0;
-  skull.y = random (0, height);
-
+if (enemyShip.x > width) {
+  enemyShip.x = 0;
+  enemyShip.y = random (0, height);
+  }
 }
 
 //The movement for the User, uses WASD.
@@ -125,62 +132,71 @@ function movementInput() {
 
 //Movement for Robber
 if (keyIsDown(65)) {
-user.ax = -user.accel;
+player.ax = -player.accel;
 }
 else if (keyIsDown(68)) {
-user.ax = user.accel;
+player.ax = player.accel;
 }
 else {
-user.ax = 0;
+player.ax = 0;
 }
 if (keyIsDown(87)) {
-user.ay = -user.accel;
+player.ay = -player.accel;
 }
 else if (keyIsDown(83)) {
-user.ay = user.accel;
+player.ay = player.accel;
 }
 else {
-user.ay = 0;
+player.ay = 0;
 }
 
 //Pippin proposed the variable "friction", which allows for smooth WASD movement
-user.vx = user.vx * user.friction;
-user.vy = user.vy * user.friction;
+player.vx = player.vx * player.friction;
+player.vy = player.vy * player.friction;
 
-user.x = user.x + user.vx;
-user.y = user.y + user.vy;
+player.x = player.x + player.vx;
+player.y = player.y + player.vy;
 
-user.vx = user.ax + user.vx;
-user.vx = constrain(user.vx,-user.MaxV,user.MaxV);
-user.vy = user.ay + user.vy;
-user.vy = constrain(user.vy,-user.MaxV,user.MaxV);
+player.vx = player.ax + player.vx;
+player.vx = constrain(player.vx,-player.MaxV,player.MaxV);
+player.vy = player.ay + player.vy;
+player.vy = constrain(player.vy,-player.MaxV,player.MaxV);
 }
 
+function enemyCrash() {
 //Checking for Skull
-let d = dist(user.x, user.y, skull.x, skull.y);
-if (d < skull.size/2 + user.size/2) {
-  noLoop();
+let d = dist(player.x, player.y, enemyShip.x, enemyShip.y);
+if (d < enemyShip.size/2 + player.size/2) {
+  state = `death`;
+  }
 }
 
-//Display Skull
+function enemyEffect() {
 //Checking for distance between Skull and User, for size enhancement
-let proximity = int(dist(user.x, user.y, skull.x, skull.y));
-let proximityInv = map(proximity, skull.x, windowWidth, skull.y, windowHeight);
+let proximity = int(dist(player.x, player.y, enemyShip.x, enemyShip.y));
+let proximityInv = map(proximity, enemyShip.x, windowWidth, enemyShip.y, windowHeight);
 proximityInv = constrain(proximityInv, 0, 600);
 
 //When far, grow. When closer, shrink (+ it's going an idea for the project).
 if (proximityInv > 300) {
-skull.size = 500;
+enemyShip.size = 500;
 } else (proximityInv < 300)
 {
-skull.size = 100;
+enemyShip.size = 100;
 }
-image (enemyimg, skull.x, skull.y, proximityInv, proximityInv);
-
-//Display User and custom cursor
+image (enemyimg, enemyShip.x, enemyShip.y, proximityInv, proximityInv);
+  }
+}
+//Display PNG for character, and custom cursor
+function charDisplay() {
   imageMode(CENTER);
-  image(userimg,user.x,user.y);
+  image(playerimg,player.x,player.y);
   imageMode(CENTER);
-  image(cursorimg,(mouseX),(mouseY + 50));
+  //image(cursorimg,(mouseX),(mouseY + 50));
+}
 
+function mousePressed () {
+  if (state === `title`) {
+    state = `simulation`;
+  }
 }

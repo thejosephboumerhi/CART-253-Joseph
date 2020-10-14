@@ -10,16 +10,15 @@ will be an idea for my project!
 
 let enemyShip = {
   x: 0,
-  y: 250,
-  size: 400,
+  y: 0,
+  size: 100,
   vx: 0,
   vy: 0,
-  speed: 5,
-  fill: {
-    r: 255,
-    g: 0,
-    b: 0
-  }
+  speed: 1,
+  tx: 0,
+  ty: 10,
+  pursuit: 0,
+  flee: 0
 };
 
 let player = {
@@ -29,11 +28,10 @@ let player = {
   vy: 0,
   ax: 0,
   ay: 0,
-  Accel: 1,
-  MaxV: 10,
-  friction: 0.80,
-  size: 100,
-  fill: 255
+  accel: 2,
+  MaxV: 12,
+  friction: 0.90,
+  size: 100
 };
 
 //Allows for various states to be used, starting with title
@@ -55,10 +53,9 @@ enemyimg = loadImage('assets/images/EnemyShip.png');
 
 //Starts simulation
 function setup() {
-
 createCanvas (windowWidth, windowHeight);
-enemyShip.y = random (0, height);
-enemyShip.vx = enemyShip.speed;
+enemyShip.x = random (0, width);
+enemyShip.vy = enemyShip.speed;
 }
 
 //Skull and User drawn
@@ -73,6 +70,7 @@ else if (state === `simulation`) {
 }
 else if (state === `death`) {
   death();
+  } 
 }
 
 
@@ -106,31 +104,42 @@ function death() {
 
 function visualFX () {
 //Display visual effects (clouds)
-for (let i = 0; i < numClouds; i++) {
+for (let c = 0; c < numClouds; c++) {
   let x = random(0,width);
   let y = random(0,height);
-  strokeWeight(15);
+  push();
+  strokeWeight(50);
   stroke(155);
   point(x,y);
+  pop();
   }
 }
 
 function ai_Enemy() {
-//Skull movement
+//Enemy movement, slapped together the automated movement page
+  let perlinX = (enemyShip.tx);
+  let perlinY = (enemyShip.ty);
+
+  enemyShip.tx = enemyShip.tx + 0.025;
+  enemyShip.ty = enemyShip.ty + 0.025;
+
+  enemyShip.vx = map(perlinX,0,1,-enemyShip.speed,enemyShip.speed);
+  enemyShip.vy = map(perlinY,0,1,-enemyShip.speed,enemyShip.speed);
+
   enemyShip.x = enemyShip.x + enemyShip.vx;
   enemyShip.y = enemyShip.y + enemyShip.vy;
 
-//Skull reset location
-if (enemyShip.x > width) {
-  enemyShip.x = 0;
-  enemyShip.y = random (0, height);
+//Enemy reset location
+if (enemyShip.y > height) {
+  enemyShip.y = 0;
+  enemyShip.x = random (0, width);
   }
 }
 
 //The movement for the User, uses WASD.
 function movementInput() {
 
-//Movement for Robber
+//Movement for Player
 if (keyIsDown(65)) {
 player.ax = -player.accel;
 }
@@ -172,26 +181,14 @@ if (d < enemyShip.size/2 + player.size/2) {
 }
 
 function enemyEffect() {
-//Checking for distance between Skull and User, for size enhancement
-let proximity = int(dist(player.x, player.y, enemyShip.x, enemyShip.y));
-let proximityInv = map(proximity, enemyShip.x, windowWidth, enemyShip.y, windowHeight);
-proximityInv = constrain(proximityInv, 0, 600);
+image (enemyimg, enemyShip.x, enemyShip.y);
+}
 
-//When far, grow. When closer, shrink (+ it's going an idea for the project).
-if (proximityInv > 300) {
-enemyShip.size = 500;
-} else (proximityInv < 300)
-{
-enemyShip.size = 100;
-}
-image (enemyimg, enemyShip.x, enemyShip.y, proximityInv, proximityInv);
-  }
-}
 //Display PNG for character, and custom cursor
 function charDisplay() {
   imageMode(CENTER);
   image(playerimg,player.x,player.y);
-  imageMode(CENTER);
+  //imageMode(CENTER);
   //image(cursorimg,(mouseX),(mouseY + 50));
 }
 

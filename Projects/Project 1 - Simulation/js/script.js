@@ -16,9 +16,9 @@ let enemyShip = {
   vy: 0,
   speed: 1,
   tx: 0,
-  ty: 10,
-  pursuit: 0,
-  flee: 0
+  ty: 0.1,
+  closer: 0,
+  away: 0
 };
 
 let player = {
@@ -70,7 +70,7 @@ else if (state === `simulation`) {
 }
 else if (state === `death`) {
   death();
-  } 
+  }
 }
 
 
@@ -81,6 +81,7 @@ ai_Enemy();
 visualFX();
 enemyEffect();
 enemyCrash();
+borderBlock();
 mousePressed();
 }
 
@@ -117,15 +118,55 @@ for (let c = 0; c < numClouds; c++) {
 
 function ai_Enemy() {
 //Enemy movement, slapped together the automated movement page
-  let perlinX = (enemyShip.tx);
-  let perlinY = (enemyShip.ty);
 
-  enemyShip.tx = enemyShip.tx + 0.025;
-  enemyShip.ty = enemyShip.ty + 0.025;
+//From away, the AI will approach
+// Distance between the enemy and player horizontally
+let dx = enemyShip.x - player.x;
+// Distance between the enemy and player vertically
+let dy = enemyShip.y - player.y;
 
-  enemyShip.vx = map(perlinX,0,1,-enemyShip.speed,enemyShip.speed);
-  enemyShip.vy = map(perlinY,0,1,-enemyShip.speed,enemyShip.speed);
+let proximityAway = int(dist(player.x, player.y, enemyShip.x, enemyShip.y));
+let proximityAwayI = map(proximityAway, enemyShip.x, windowWidth, enemyShip.y, windowHeight);
+proximityAwayI = constrain(proximityAwayI, 200, 400);
 
+  if (dx < 200) { // If dx is negative, the mouse is to the right
+    // So move right
+    enemyShip.vx = enemyShip.speed;
+  }
+  else if (dx > 200) { // If dx is positive, the mouse is to the left
+    // So move left
+    enemyShip.vx = -enemyShip.speed;
+  }
+
+  // Same again for the y axis
+  if (dy < 200) {
+    enemyShip.vy = enemyShip.speed;
+  }
+  else if (dy > 200) {
+    enemyShip.vy = -enemyShip.speed;
+  }
+
+//From a closer range to the player, it will move a bit away
+let proximityCloser = int(dist(player.x, player.y, enemyShip.x, enemyShip.y));
+let proximityCloserI = map(proximityCloser, enemyShip.x, windowWidth, enemyShip.y, windowHeight);
+proximityCloserI = constrain(proximityCloser, 0, 300);
+
+  if (dx < 0) { // If dx is negative, the mouse is to the right
+  // So move left (run away!)
+  enemyShip.vx = -enemyShip.speed;
+}
+else if (dx > 0) { // If dx is positive, the mouse is to the left
+  // So move right (run away!)
+  enemyShip.vx = enemyShip.speed;
+}
+
+// Same again for the y axis
+if (dy < 0) {
+  enemyShip.vy = -enemyShip.speed;
+}
+else if (dy > 0) {
+  enemyShip.vy = enemyShip.speed;
+}
   enemyShip.x = enemyShip.x + enemyShip.vx;
   enemyShip.y = enemyShip.y + enemyShip.vy;
 
@@ -179,11 +220,14 @@ if (d < enemyShip.size/2 + player.size/2) {
   state = `death`;
   }
 }
-
+//For each time the enemyShip,
 function enemyEffect() {
 image (enemyimg, enemyShip.x, enemyShip.y);
 }
-
+function borderBlock() {
+player.x = constrain(player.x,0,width);
+player.y = constrain(player.y,0,height);
+}
 //Display PNG for character, and custom cursor
 function charDisplay() {
   imageMode(CENTER);

@@ -23,6 +23,8 @@ let enemyShip = {
   numEShipsmax: 5,
 };
 
+let enemyFleet = [];
+
 let player = {
   x: 0,
   y: 250,
@@ -192,7 +194,7 @@ function enemyCrash() {
 function enemyEffect() {
   if (enemyShip.y >= height) {
     enemyShip.resetsDone++;
-  } else if (enemyShip.resetsDone >= 3) {
+  } else if (enemyShip.resetsDone >= 3 * currentEShip) {
     enemyShip.resetsDone = 0 && enemyShip.currentEShip++;
   }
   for (
@@ -200,7 +202,7 @@ function enemyEffect() {
     enemyShip.currentEShip < enemyShip.numEShipsmax;
     enemyShip.currentEShip++
   ) {
-    image(enemyimg, enemyShip.x, enemyShip.y);
+    enemyFleet[enemyShip.currentEShip] = createenemyShip(random(0, width), 0);
   }
 }
 
@@ -221,5 +223,14 @@ function mousePressed() {
   if (state === `title`) {
     state = `simulation`;
   }
-  function reset() {}
+  function reset() {
+    if (state === `death`) {
+      state = `title`;
+      player.x = width / 2;
+      player.y = height / 2;
+      enemyShip.x = random(0, width);
+      enemyShip.y = 0;
+      enemyShip.resetsDone = 0;
+    }
+  }
 }

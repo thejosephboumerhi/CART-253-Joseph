@@ -34,6 +34,7 @@ let enemyimg;
 //For Array and enemyShips spawns
 let enemyFleet = [];
 let fleetLimit = 5;
+let resetsDone = 0;
 
 function preload() {
   playerimg = loadImage("assets/images/Ship.png");
@@ -64,14 +65,14 @@ function simulation() {
   movementInput();
   charDisplay();
   visualFX();
-  startArray();
-  createEnemyShip(x, y);
-  ai_Enemy(enemyShip);
-  enemyDisplay(enemyShip);
-  enemyEffect(enemyShip);
-  enemyCrash(enemyShip);
+  //startArray();
+  //createEnemyShip();
+  //let enemyShip = createEnemyShip();
+  //ai_Enemy(enemyShip);
+  //enemyDisplay(enemyShip);
+  //enemyEffect(enemyShip);
+  //enemyCrash(enemyShip);
   borderBlock();
-  mousePressed();
   reset();
 }
 
@@ -105,9 +106,9 @@ function startArray() {
   }
 }
 
-function createEnemyShip(x, y) {
+function createEnemyShip() {
   let enemyShip = {
-    x: 0,
+    x: random(0, width),
     y: 0,
     size: 100,
     vx: 0,
@@ -115,7 +116,6 @@ function createEnemyShip(x, y) {
     speed: 6,
     tx: 0,
     ty: 0,
-    resetsDone: 0,
   };
   return enemyShip;
 }
@@ -209,9 +209,12 @@ function enemyCrash(enemyShip) {
 //and once those values are fulfilled, add another enemy.
 function enemyEffect(enemyShip) {
   if (enemyShip.y > height) {
-    enemyShip.resetsDone++ && e;
-  } else if (enemyShip.resetsDone > 3 * e) {
-    enemyShip.resetsDone = 0;
+    resetsDone++;
+    console.log(resetsDone);
+  }
+  if (resetsDone > 3) {
+    resetsDone = 0;
+    console.log(resetsDone);
   }
 }
 
@@ -242,6 +245,7 @@ function enemyDisplay(enemyShip) {
 
 function mousePressed() {
   if (state === `title`) {
+    startArray();
     state = `simulation`;
   }
 }

@@ -46,7 +46,14 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
 }
 
-function createEnemyShip(x, y) {
+function startArray() {
+  for (let e = 0; e < fleetLimit; e++) {
+    let enemyShip = createEnemyShip(random(0, width), 0);
+    enemyFleet.push(enemyShip);
+  }
+}
+
+function createEnemyShip() {
   let enemyShip = {
     x: 0,
     y: 0,
@@ -81,9 +88,10 @@ function draw() {
 
 //Runs functions
 function simulation() {
+  startArray();
+  createEnemyShip();
   movementInput();
   charDisplay();
-  createEnemyShip(x, y);
   visualFX();
   enemyEffect(enemyShip);
   enemyCrash(enemyShip);
@@ -235,7 +243,6 @@ function mousePressed() {
     state = `simulation`;
   }
 }
-
 function reset() {
   if (state === `death`) {
     state = `title`;

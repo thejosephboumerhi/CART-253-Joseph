@@ -46,36 +46,9 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
 }
 
-function startArray() {
-  for (let e = 0; e < fleetLimit; e++) {
-    let enemyShip = createEnemyShip(random(0, width), 0);
-    enemyFleet.push(enemyShip);
-  }
-}
-
-function createEnemyShip() {
-  let enemyShip = {
-    x: 0,
-    y: 0,
-    size: 100,
-    vx: 0,
-    vy: 0,
-    speed: 6,
-    tx: 0,
-    ty: 0,
-    resetsDone: 0,
-  };
-  return enemyShip;
-}
-
 //Begins game
 function draw() {
   background(0, 0, 255);
-
-  for (let e = 1; e < enemyFleet.length; e++) {
-    ai_Enemy(enemyFleet[e]);
-    enemyDisplay(enemyFleet[e]);
-  }
 
   if (state === `title`) {
     title();
@@ -88,11 +61,13 @@ function draw() {
 
 //Runs functions
 function simulation() {
-  startArray();
-  createEnemyShip();
   movementInput();
   charDisplay();
   visualFX();
+  startArray();
+  createEnemyShip(x, y);
+  ai_Enemy(enemyShip);
+  enemyDisplay(enemyShip);
   enemyEffect(enemyShip);
   enemyCrash(enemyShip);
   borderBlock();
@@ -116,6 +91,33 @@ function death() {
   textAlign(CENTER, CENTER);
   text(`Defeat!`, width / 2, height / 2);
   pop();
+}
+
+function startArray() {
+  for (let e = 0; e < fleetLimit; e++) {
+    let enemyShip = createEnemyShip(random(0, width), 0);
+    enemyFleet.push(enemyShip);
+  }
+
+  for (let e = 1; e < enemyFleet.length; e++) {
+    ai_Enemy(enemyFleet[e]);
+    enemyDisplay(enemyFleet[e]);
+  }
+}
+
+function createEnemyShip(x, y) {
+  let enemyShip = {
+    x: 0,
+    y: 0,
+    size: 100,
+    vx: 0,
+    vy: 0,
+    speed: 6,
+    tx: 0,
+    ty: 0,
+    resetsDone: 0,
+  };
+  return enemyShip;
 }
 
 function visualFX() {
@@ -206,9 +208,9 @@ function enemyCrash(enemyShip) {
 //For each time the enemyShip touches the bottom, it'll add to values,
 //and once those values are fulfilled, add another enemy.
 function enemyEffect(enemyShip) {
-  if (enemyShip.y >= height) {
+  if (enemyShip.y > height) {
     enemyShip.resetsDone++ && e;
-  } else if (enemyShip.resetsDone >= 3 * e) {
+  } else if (enemyShip.resetsDone > 3 * e) {
     enemyShip.resetsDone = 0;
   }
 }

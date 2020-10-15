@@ -5,20 +5,7 @@ Joseph Boumerhi
 Evade the Enemy Ships
 Uses WASD for movement
 ************************************************************************/
-
-let enemyFleet = [];
-let fleetLimit = 5;
-let enemyShip = {
-  x: 0,
-  y: 0,
-  size: 100,
-  vx: 0,
-  vy: 0,
-  speed: 6,
-  tx: 0,
-  ty: 0,
-  resetsDone: 0,
-};
+"use strict";
 
 let player = {
   x: 0,
@@ -44,6 +31,10 @@ let playerimg;
 let cursorimg;
 let enemyimg;
 
+//For Array and enemyShips spawns
+let enemyFleet = [];
+let fleetLimit = 5;
+
 function preload() {
   playerimg = loadImage("assets/images/Ship.png");
   cursorimg = loadImage("assets/images/Usercursor.png");
@@ -53,16 +44,31 @@ function preload() {
 //Starts simulation
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  for (let e = 0; e < fleetLimit; e++) {
-    let enemyFleet = enemyShip(random(0, width), 0);
-    enemyFleet.push(fleetLimit);
-  }
-  return enemyFleet;
 }
 
-//Skull and User drawn
+function createEnemyShip(x, y) {
+  let enemyShip = {
+    x: 0,
+    y: 0,
+    size: 100,
+    vx: 0,
+    vy: 0,
+    speed: 6,
+    tx: 0,
+    ty: 0,
+    resetsDone: 0,
+  };
+  return enemyShip;
+}
+
+//Begins game
 function draw() {
   background(0, 0, 255);
+
+  for (let e = 1; e < enemyFleet.length; e++) {
+    ai_Enemy(enemyFleet[e]);
+    enemyDisplay(enemyFleet[e]);
+  }
 
   if (state === `title`) {
     title();
@@ -73,17 +79,17 @@ function draw() {
   }
 }
 
+//Runs functions
 function simulation() {
   movementInput();
   charDisplay();
-  createFleet();
-  ai_Enemy(enemyFleet);
-  enemyDisplay(enemyFleet);
+  createEnemyShip(x, y);
   visualFX();
-  enemyEffect(enemyFleet);
-  enemyCrash(enemyFleet);
+  enemyEffect(enemyShip);
+  enemyCrash(enemyShip);
   borderBlock();
   mousePressed();
+  reset();
 }
 
 function title() {
@@ -116,22 +122,8 @@ function visualFX() {
     pop();
   }
 }
-function createFleet() {
-  let enemyShip = {
-    x: 0,
-    y: 0,
-    size: 100,
-    vx: 0,
-    vy: 0,
-    speed: 6,
-    tx: 0,
-    ty: 0,
-    resetsDone: 0,
-  };
-  return fleet;
-}
 
-function ai_Enemy(enemyFleet) {
+function ai_Enemy(enemyShip) {
   //Enemy movement, slapped together the automated movement page
 
   //From away, the AI will approach
@@ -196,7 +188,7 @@ function movementInput() {
   player.vy = constrain(player.vy, -player.MaxV, player.MaxV);
 }
 
-function enemyCrash(enemyFleet) {
+function enemyCrash(enemyShip) {
   //Checking for EnemyShip
   let d = dist(player.x, player.y, enemyShip.x, enemyShip.y);
   if (d < enemyShip.size / 2 + player.size / 2) {
@@ -205,7 +197,7 @@ function enemyCrash(enemyFleet) {
 }
 //For each time the enemyShip touches the bottom, it'll add to values,
 //and once those values are fulfilled, add another enemy.
-function enemyEffect(enemyFleet) {
+function enemyEffect(enemyShip) {
   if (enemyShip.y >= height) {
     enemyShip.resetsDone++ && e;
   } else if (enemyShip.resetsDone >= 3 * e) {
@@ -221,34 +213,33 @@ function borderBlock() {
   player.x = constrain(player.x, 0, width);
   player.y = constrain(player.y, 0, height);
 }
+
 //Display PNG for player, and custom cursor
 function charDisplay() {
+  push();
   imageMode(CENTER);
   image(playerimg, player.x, player.y);
+  pop();
   //imageMode(CENTER);
   //image(cursorimg,(mouseX),(mouseY + 50));
 }
 
-function enemyDisplay(enemyFleet) {
-  for (let i = 0; i < fleetLimit; i++) {
-    moveenemyFleet(enemyFleet[e]);
-    displayenemyFleet(enemyFleet[e]);
-    image(enemyimg, enemyShip.x, enemyShip.y);
-  }
+function enemyDisplay(enemyShip) {
+  push();
+  image(enemyimg, enemyShip.x, enemyShip.y);
+  pop();
+}
 
-  function mousePressed() {
-    if (state === `title`) {
-      state = `simulation`;
-    }
+function mousePressed() {
+  if (state === `title`) {
+    state = `simulation`;
   }
-  function reset() {
-    if (state === `death`) {
-      state = `title`;
-      player.x = width / 2;
-      player.y = height / 2;
-      enemyShip.x = random(0, width);
-      enemyShip.y = 0;
-      enemyShip.resetsDone = 0;
-    }
+}
+
+function reset() {
+  if (state === `death`) {
+    state = `title`;
+    player.x = width / 2;
+    player.y = height / 2;
   }
 }

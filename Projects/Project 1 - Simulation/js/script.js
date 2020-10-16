@@ -8,8 +8,8 @@ Uses WASD for movement
 "use strict";
 
 let player = {
-  x: 0,
-  y: 0,
+  x: 500,
+  y: 500,
   vx: 0,
   vy: 0,
   ax: 0,
@@ -17,7 +17,7 @@ let player = {
   accel: 2,
   MaxV: 16,
   friction: 0.9,
-  size: 100,
+  size: 75,
 };
 
 //Allows for various states to be used, starting with title
@@ -26,7 +26,10 @@ let state = `title`;
 //Background effect limit, bigger and lesser particles in BG
 let numClouds = 50;
 
-//Allows my images to be loaded in
+//Allows my assets to be loaded in
+//Font for dafont.com (https://www.dafont.com/gameplay.font)
+let font1;
+//Custom pixel art using Piskel, online pixel editor
 let playerimg;
 let cursorimg;
 let enemyimg;
@@ -37,6 +40,7 @@ let fleetLimit = 1;
 let resetsDone = 0;
 
 function preload() {
+  font1 = loadFont("assets/fonts/Gameplay.ttf");
   playerimg = loadImage("assets/images/Ship.png");
   cursorimg = loadImage("assets/images/Usercursor.png");
   enemyimg = loadImage("assets/images/EnemyShip.png");
@@ -72,13 +76,16 @@ function simulation() {
     enemyCrash(enemyFleet[e]);
   }
   borderBlock();
-  reset();
+  resetGame();
 }
 
 function title() {
   push();
+  textFont(font1);
   textSize(50);
   fill(200, 200, 100);
+  stroke(0);
+  strokeWeight(5);
   textAlign(CENTER, CENTER);
   text(`Aerial-Luster`, width / 2, height / 2);
   pop();
@@ -86,8 +93,11 @@ function title() {
 
 function death() {
   push();
+  textFont(font1);
   textSize(50);
-  fill(150, 150, 255);
+  fill(255, 0, 0);
+  stroke(0);
+  strokeWeight(5);
   textAlign(CENTER, CENTER);
   text(`Defeat!`, width / 2, height / 2);
   pop();
@@ -109,12 +119,12 @@ function createEnemyShip() {
   let enemyShip = {
     x: random(0, width),
     y: 0,
-    size: 100,
     vx: 0,
     vy: 0,
     speed: random(4, 6),
     tx: 0,
     ty: 0,
+    size: random(50, 200),
   };
   return enemyShip;
 }
@@ -133,29 +143,36 @@ function visualFX() {
 }
 
 function ai_Enemy(enemyShip) {
-  //Enemy movement, slapped together the automated movement page
+  //Enemy movement, pasted and slapped in from the automated movement page,
+  //i'll explain in my words, so it's like I can understand what the lines
+  //do too, in my words (changed the "d"s to "p"s, cause I like P for Proximity)
 
-  //From away, the AI will approach
-  // Distance between the enemy and player horizontally
-  let dx = enemyShip.x - player.x;
-  // Distance between the enemy and player vertically
-  let dy = enemyShip.y - player.y;
+  //Whenever player is out of line of sight of enemy, the AI will steer
+  //towards the player.
+  //Calculates how far left and right
+  let px = enemyShip.x - player.x;
 
-  if (dx < 0) {
-    // If dx is negative, the player is to the right
-    // So move right
+  //Calculates how far up and down
+  let py = enemyShip.y - player.y;
+
+  //Detects X positions of the player
+  if (px < 0) {
+    // So move right, if the player px is negative
     enemyShip.vx = enemyShip.speed;
-  } else if (dx > 0) {
-    // If dx is positive, the player is to the left
-    // So move left
+  } else if (px > 0) {
+    // So move left, if the player px is postive
     enemyShip.vx = -enemyShip.speed;
   }
 
-  // Same again for the y axis, but it goes only down
-  if (dy < 0) {
+  //Detects a Y position of the player
+  if (py < 0) {
     enemyShip.vy = enemyShip.speed;
+    //removed the -enemyShip.speed segment else-if, so it doesn't backpedal
+    //towards the player, only moves forward now, essential
+    //for the game mechanics to work properly.
   }
 
+  //
   enemyShip.x = enemyShip.x + enemyShip.vx;
   enemyShip.y = enemyShip.y + enemyShip.vy;
 
@@ -166,9 +183,10 @@ function ai_Enemy(enemyShip) {
   }
 }
 
-//The movement for the User, uses WASD.
+//The movement for the player, uses WASD.
 function movementInput() {
   //Movement for Player
+  //Accel allows for fluid movement, instead of stiffness without it.
   if (keyIsDown(65)) {
     player.ax = -player.accel;
   } else if (keyIsDown(68)) {
@@ -184,7 +202,8 @@ function movementInput() {
     player.ay = 0;
   }
 
-  //Pippin proposed the variable "friction", which allows for smooth WASD movement
+  //Pippin proposed the variable "friction" from previous assignment,
+  //which allows for smoother WASD movement.
   player.vx = player.vx * player.friction;
   player.vy = player.vy * player.friction;
 
@@ -197,6 +216,7 @@ function movementInput() {
   player.vy = constrain(player.vy, -player.MaxV, player.MaxV);
 }
 
+//Simple collision detection
 function enemyCrash(enemyShip) {
   //Checking for EnemyShip
   let d = dist(player.x, player.y, enemyShip.x, enemyShip.y);
@@ -204,8 +224,11 @@ function enemyCrash(enemyShip) {
     state = `death`;
   }
 }
+
 //For each time the enemyShip touches the bottom, it'll add to values,
 //and once those values are fulfilled, add another enemy.
+//**resetsDone adjusts to # of enemyShips present,
+//so no crazy fast spawning, it's proportionate to # of enemyShips.
 function enemyEffect(enemyShip) {
   if (enemyShip.y > height - 10) {
     resetsDone++;
@@ -216,10 +239,7 @@ function enemyEffect(enemyShip) {
   }
 }
 
-//function enemyModifier() {
-
-//}
-
+//Simply constricts the player in the canvas (can't just leave canvas)
 function borderBlock() {
   player.x = constrain(player.x, 0, width);
   player.y = constrain(player.y, 0, height);
@@ -229,34 +249,35 @@ function borderBlock() {
 function charDisplay() {
   push();
   imageMode(CENTER);
-  image(playerimg, player.x, player.y);
+  image(playerimg, player.x, player.y, player.size, player.size);
   pop();
 }
 
-//
+//Display PNG for enemies
 function enemyDisplay(enemyShip) {
   push();
-  stroke(255, 0, 0);
-  strokeWeight(1);
-  image(enemyimg, enemyShip.x, enemyShip.y);
+  imageMode(CENTER);
+  image(enemyimg, enemyShip.x, enemyShip.y, enemyShip.size, enemyShip.size);
   pop();
 }
 
+//Title into game, while also starting up the array
 function mousePressed() {
   if (state === `title`) {
     startArray();
     state = `simulation`;
   }
 }
-function reset() {
-  //if (keyIsDown(32)) {
-  //
-  //}
+
+//Acts as a soft reset for the game
+function resetGame() {
+  //Has to be "death" state to be able to reset
+  //Resets everything
   if (state === `death`) {
-    state = `title`;
     player.x = width / 2;
     player.y = height / 2;
-
     enemyFleet = [];
+  } else if (keyIsDown(32)) {
+    state === `title`;
   }
 }

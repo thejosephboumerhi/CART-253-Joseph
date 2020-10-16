@@ -4,9 +4,11 @@ Joseph Boumerhi
 
 Evade the Enemy Ships
 Uses WASD for movement
+On "Defeat!", press Spacebar to reset the game.
 ************************************************************************/
 "use strict";
 
+//Player values
 let player = {
   x: 500,
   y: 500,
@@ -61,6 +63,7 @@ function draw() {
     simulation();
   } else if (state === `death`) {
     death();
+    resetGame();
   }
 }
 
@@ -76,7 +79,6 @@ function simulation() {
     enemyCrash(enemyFleet[e]);
   }
   borderBlock();
-  resetGame();
 }
 
 function title() {
@@ -172,7 +174,6 @@ function ai_Enemy(enemyShip) {
     //for the game mechanics to work properly.
   }
 
-  //
   enemyShip.x = enemyShip.x + enemyShip.vx;
   enemyShip.y = enemyShip.y + enemyShip.vy;
 
@@ -247,18 +248,14 @@ function borderBlock() {
 
 //Display PNG for player
 function charDisplay() {
-  push();
   imageMode(CENTER);
   image(playerimg, player.x, player.y, player.size, player.size);
-  pop();
 }
 
 //Display PNG for enemies
 function enemyDisplay(enemyShip) {
-  push();
   imageMode(CENTER);
   image(enemyimg, enemyShip.x, enemyShip.y, enemyShip.size, enemyShip.size);
-  pop();
 }
 
 //Title into game, while also starting up the array
@@ -277,7 +274,10 @@ function resetGame() {
     player.x = width / 2;
     player.y = height / 2;
     enemyFleet = [];
-  } else if (keyIsDown(32)) {
-    state === `title`;
+    fleetLimit = 1;
+    resetsDone = 0;
+  }
+  if (keyIsDown(32)) {
+    state = `title`;
   }
 }

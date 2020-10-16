@@ -9,13 +9,13 @@ Uses WASD for movement
 
 let player = {
   x: 0,
-  y: 250,
+  y: 0,
   vx: 0,
   vy: 0,
   ax: 0,
   ay: 0,
   accel: 2,
-  MaxV: 14,
+  MaxV: 16,
   friction: 0.9,
   size: 100,
 };
@@ -33,7 +33,7 @@ let enemyimg;
 
 //For Array and enemyShips spawns
 let enemyFleet = [];
-let fleetLimit = 5;
+let fleetLimit = 1;
 let resetsDone = 0;
 
 function preload() {
@@ -65,13 +65,12 @@ function simulation() {
   movementInput();
   charDisplay();
   visualFX();
-  //startArray();
-  //createEnemyShip();
-  //let enemyShip = createEnemyShip();
-  //ai_Enemy(enemyShip);
-  //enemyDisplay(enemyShip);
-  //enemyEffect(enemyShip);
-  //enemyCrash(enemyShip);
+  for (let e = 0; e < enemyFleet.length; e++) {
+    enemyEffect(enemyFleet[e]);
+    ai_Enemy(enemyFleet[e]);
+    enemyDisplay(enemyFleet[e]);
+    enemyCrash(enemyFleet[e]);
+  }
   borderBlock();
   reset();
 }
@@ -96,7 +95,7 @@ function death() {
 
 function startArray() {
   for (let e = 0; e < fleetLimit; e++) {
-    let enemyShip = createEnemyShip(random(0, width), 0);
+    let enemyShip = createEnemyShip();
     enemyFleet.push(enemyShip);
   }
 
@@ -113,7 +112,7 @@ function createEnemyShip() {
     size: 100,
     vx: 0,
     vy: 0,
-    speed: 6,
+    speed: random(4, 6),
     tx: 0,
     ty: 0,
   };
@@ -208,13 +207,12 @@ function enemyCrash(enemyShip) {
 //For each time the enemyShip touches the bottom, it'll add to values,
 //and once those values are fulfilled, add another enemy.
 function enemyEffect(enemyShip) {
-  if (enemyShip.y > height) {
+  if (enemyShip.y > height - 10) {
     resetsDone++;
-    console.log(resetsDone);
   }
-  if (resetsDone > 3) {
+  if (resetsDone > 3 * enemyFleet.length) {
     resetsDone = 0;
-    console.log(resetsDone);
+    enemyFleet.push(createEnemyShip());
   }
 }
 
@@ -227,18 +225,19 @@ function borderBlock() {
   player.y = constrain(player.y, 0, height);
 }
 
-//Display PNG for player, and custom cursor
+//Display PNG for player
 function charDisplay() {
   push();
   imageMode(CENTER);
   image(playerimg, player.x, player.y);
   pop();
-  //imageMode(CENTER);
-  //image(cursorimg,(mouseX),(mouseY + 50));
 }
 
+//
 function enemyDisplay(enemyShip) {
   push();
+  stroke(255, 0, 0);
+  strokeWeight(1);
   image(enemyimg, enemyShip.x, enemyShip.y);
   pop();
 }
@@ -250,9 +249,14 @@ function mousePressed() {
   }
 }
 function reset() {
+  //if (keyIsDown(32)) {
+  //
+  //}
   if (state === `death`) {
     state = `title`;
     player.x = width / 2;
     player.y = height / 2;
+
+    enemyFleet = [];
   }
 }

@@ -6,6 +6,19 @@ Simulation of an aquarium, with a user-controlled unit
 that has to remain alive
 *******************************************************/
 let state = `title`;
+let user = {
+  x: 0,
+  y: 0,
+  size: 50,
+  vx: 0,
+  vy: 0,
+  ax: 0,
+  ay: 0,
+  accel: 4,
+  speed: 10,
+  friction: 0.9,
+};
+
 let catfishArray = [];
 let catfish;
 let piranhaArray = [];
@@ -31,7 +44,7 @@ function draw() {
   }
 }
 
-//Text
+//Text Stuff
 function title() {
   push();
   pop();
@@ -52,12 +65,32 @@ function aquarium() {}
 
 function createCatfish() {}
 
-function displayPiranha() {}
+function moveCatfish() {}
+
+function displayPiranha() {
+  push();
+  pop();
+}
 
 function createPiranha() {}
 
-function displayPiranha() {}
+function movePiranha() {}
 
-function displayUser() {}
+function displayPiranha() {
+  push();
+  pop();
+}
+
+//Collision Stuff
+
+function overlapTrigger() {}
+
+function borderBlock() {}
+
+//Player Stuff
+function displayUser() {
+  push();
+  pop();
+}
 
 function movementInput() {}

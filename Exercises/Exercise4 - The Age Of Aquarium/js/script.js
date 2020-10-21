@@ -147,6 +147,14 @@ function displayCatfish(catfish) {
   ellipse(catfish.x, catfish.y, catfish.size);
   pop();
 }
+
+function catfishDevour()  {
+  let d = dist( target2.x, target2.y, target1.x, target1.y );
+  if(d < target1.size/2 + target2.size/2){
+   target1.state = "inactive";
+  }
+}
+
 function deathByCatfish(catfish) {
   //Checking for either catfish
   let pd = dist(user.x, user.y, catfish.x, catfish.y);
@@ -177,6 +185,7 @@ function createPiranha() {
     tx: 0,
     ty: 0,
     size: 20,
+    state: "alive";
     //health:2
   };
   return piranha;
@@ -208,6 +217,10 @@ function displayPiranha(piranha) {
   fill(50, 175, 175);
   ellipse(piranha.x, piranha.y, piranha.size);
   pop();
+}
+
+function piranhaDevour() {
+
 }
 
 function deathByPiranha(piranha) {

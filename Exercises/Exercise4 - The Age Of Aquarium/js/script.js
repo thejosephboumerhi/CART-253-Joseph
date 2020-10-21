@@ -7,23 +7,23 @@ that has to remain alive
 *******************************************************/
 let state = `title`;
 let user = {
-  x: 0,
-  y: 0,
-  size: 50,
+  x: 500,
+  y: 500,
+  size: 30,
   vx: 0,
   vy: 0,
   ax: 0,
   ay: 0,
   accel: 4,
-  MaxV: 10,
+  MaxV: 5,
   friction: 0.9,
-  //health:10
 };
 
-let catfishArray = [];
-let catfish = 2;
 let piranhaArray = [];
 let piranha = 4;
+
+let piranhaEnd = 0;
+let piranhaDuration = 60 * 5;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -72,7 +72,7 @@ function ending2() {
   stroke(0);
   strokeWeight(5);
   textAlign(CENTER, CENTER);
-  text(`They ate each other to extinction?`, width / 2, height / 2);
+  text(`Extinction By Hunger!`, width / 2, height / 2);
   pop();
 }
 
@@ -80,87 +80,13 @@ function ending2() {
 function aquarium() {
   displayUser();
   movementInput();
-  for (let c = 0; c < catfishArray.length; c++) {
-    moveCatfish(catfishArray[c]);
-    displayCatfish(catfishArray[c]);
-    deathByCatfish(catfishArray[c]);
-  }
+
   for (let p = 0; p < piranhaArray.length; p++) {
     movePiranha(piranhaArray[p]);
     displayPiranha(piranhaArray[p]);
     deathByPiranha(piranhaArray[p]);
   }
   borderBlock();
-}
-
-function startCatfishArray() {
-  for (let c = 0; c < catfish; c++) {
-    let catfish = createCatfish();
-    catfishArray.push(catfish);
-  }
-
-  for (let c = 1; c < catfishArray.length; c++) {
-    moveCatfish(catfishArray[c]);
-    displayCatfish(catfishArray[c]);
-  }
-}
-
-function createCatfish() {
-  let catfish = {
-    x: random(0, width),
-    y: random(0, height),
-    vx: 0,
-    vy: 0,
-    speed: random(2, 4),
-    tx: 0,
-    ty: 0,
-    size: 35,
-    //health:5
-  };
-  return catfish;
-}
-
-function moveCatfish(catfish) {
-  let cTx = catfish.x - user.x;
-
-  let cTy = catfish.y - user.y;
-
-  if (cTx < 0) {
-    catfish.vx = catfish.speed;
-  } else if (cTx > 0) {
-    catfish.vx = -catfish.speed;
-  }
-
-  if (cTy < 0) {
-    catfish.vy = catfish.speed;
-  } else if (cTy > 0) {
-    catfish.vy = -catfish.speed;
-  }
-
-  catfish.x = catfish.x + catfish.vx;
-  catfish.y = catfish.y + catfish.vy;
-}
-
-function displayCatfish(catfish) {
-  push();
-  fill(175, 175, 50);
-  ellipse(catfish.x, catfish.y, catfish.size);
-  pop();
-}
-
-function catfishDevour()  {
-  let d = dist( target2.x, target2.y, target1.x, target1.y );
-  if(d < target1.size/2 + target2.size/2){
-   target1.state = "inactive";
-  }
-}
-
-function deathByCatfish(catfish) {
-  //Checking for either catfish
-  let pd = dist(user.x, user.y, catfish.x, catfish.y);
-  if (pd < catfish.size / 2 + user.size / 2) {
-    state = `ending1`;
-  }
 }
 
 function startPiranhaArray() {
@@ -181,12 +107,12 @@ function createPiranha() {
     y: random(0, height),
     vx: 0,
     vy: 0,
-    speed: random(4, 6),
+    speed: random(1, 2),
     tx: 0,
     ty: 0,
     size: 20,
-    state: "alive";
-    //health:2
+    state: "alive",
+    lifespan: 100,
   };
   return piranha;
 }
@@ -207,7 +133,14 @@ function movePiranha(piranha) {
   } else if (pIy > 0) {
     piranha.vy = -piranha.speed;
   }
+  let changePiranha = random(); // Generate a random number between 0 and 1
 
+  // Change direction 1% of the time
+  if (changePiranha < 0.25) {
+    // Choose random velocities within the "speed limit"
+    piranha.vx = random(-piranha.speed, piranha.speed);
+    piranha.vy = random(-piranha.speed, piranha.speed);
+  }
   piranha.x = piranha.x + piranha.vx;
   piranha.y = piranha.y + piranha.vy;
 }
@@ -219,10 +152,6 @@ function displayPiranha(piranha) {
   pop();
 }
 
-function piranhaDevour() {
-
-}
-
 function deathByPiranha(piranha) {
   //Checking for piranha
   let pd = dist(user.x, user.y, piranha.x, piranha.y);
@@ -231,61 +160,74 @@ function deathByPiranha(piranha) {
   }
 }
 
-//For things that change states
-function mousePressed() {
-  if (state === `title`) {
-    startCatfishArray();
-    startPiranhaArray();
-    state = `aquarium`;
+function piranhaLifespan(piranha) {
+  frameCount - piranha.lifespan;
+
+  if (piranha.lifespan < 0) {
+    piranha[p].state = "inactive";
   }
 }
-
-//Collision Stuff
-
-function overlapTrigger() {}
-
-function borderBlock() {
-  user.x = constrain(user.x, 0, width);
-  user.y = constrain(user.y, 0, height);
-  catfish.x = constrain(catfish.x, 0, width);
-  catfish.y = constrain(catfish.y, 0, height);
-  piranha.x = constrain(piranha.x, 0, width);
-  piranha.y = constrain(piranha.y, 0, height);
-}
-
-//Player Stuff
-function displayUser() {
-  push();
-  fill(100, 250, 100);
-  square(user.x, user.y, user.size, user.size);
-  pop();
-}
-
-//The usual likeable movement
-function movementInput() {
-  if (keyIsDown(65)) {
-    user.ax = -user.accel;
-  } else if (keyIsDown(68)) {
-    user.ax = user.accel;
-  } else {
-    user.ax = 0;
-  }
-  if (keyIsDown(87)) {
-    user.ay = -user.accel;
-  } else if (keyIsDown(83)) {
-    user.ay = user.accel;
-  } else {
-    user.ay = 0;
+function piranhaExtinct(piranha) {
+  // check if any of the fish are still alive
+  let lastPiranhaStanding = false;
+  for (let p = 0; p < piranhaArray.length; p++) {
+    if (piranhaArray[p].state === "active") {
+      lastPiranhaStanding = true;
+    } else if (lastPiranhaStanding === false) {
+      state === `ending2`;
+    }
   }
 
-  user.vx = user.vx * user.friction;
-  user.vy = user.vy * user.friction;
+  //For things that change states
+  function mousePressed() {
+    if (state === `title`) {
+      startPiranhaArray();
 
-  user.x = user.x + user.vx;
-  user.y = user.y + user.vy;
+      state = `aquarium`;
+    }
+  }
 
-  user.vx = user.ax + user.vx;
-  user.vx = constrain(user.vx, -user.MaxV, user.MaxV);
-  user.vy = user.ay + user.vy;
-  user.vy = constrain(user.vy, -user.MaxV, user.MaxV);
+  function borderBlock() {
+    user.x = constrain(user.x, 0, width);
+    user.y = constrain(user.y, 0, height);
+    piranha.x = constrain(piranha.x, 0, width);
+    piranha.y = constrain(piranha.y, 0, height);
+  }
+
+  //Player Stuff
+  function displayUser() {
+    push();
+    fill(100, 250, 100);
+    square(user.x, user.y, user.size, user.size);
+    pop();
+  }
+
+  //The usual likeable movement
+  function movementInput() {
+    if (keyIsDown(65)) {
+      user.ax = -user.accel;
+    } else if (keyIsDown(68)) {
+      user.ax = user.accel;
+    } else {
+      user.ax = 0;
+    }
+    if (keyIsDown(87)) {
+      user.ay = -user.accel;
+    } else if (keyIsDown(83)) {
+      user.ay = user.accel;
+    } else {
+      user.ay = 0;
+    }
+
+    user.vx = user.vx * user.friction;
+    user.vy = user.vy * user.friction;
+
+    user.x = user.x + user.vx;
+    user.y = user.y + user.vy;
+
+    user.vx = user.ax + user.vx;
+    user.vx = constrain(user.vx, -user.MaxV, user.MaxV);
+    user.vy = user.ay + user.vy;
+    user.vy = constrain(user.vy, -user.MaxV, user.MaxV);
+  }
 }

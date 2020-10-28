@@ -17,7 +17,7 @@ let numBalls = 3;
 function setup() {
   createCanvas(windowWidth, windowHeight);
   paddle = new Paddle(300, 20);
-
+  let i = 0;
   for (i = 0; i < numBalls; i++) {
     let x = random(0, width);
     let y = random(-400, -100);
@@ -32,7 +32,7 @@ function draw() {
   if (state === `title`) {
     title();
   } else if (state === `juggling`) {
-    simulation();
+    juggling();
   } else if (state === `ending1`) {
     ending1();
   } else if (state === `ending2`) {
@@ -63,28 +63,35 @@ function juggling() {
       ball.move();
       ball.bounce(paddle);
       ball.display();
+      ball.border();
     }
   }
+}
 
-  function ending1() {
-    push();
-    textSize(50);
-    fill(200, 50, 50);
-    stroke(0);
-    strokeWeight(5);
-    textAlign(CENTER, CENTER);
-    text(`All Balls Lost`, width / 2, height / 2);
-    pop();
-  }
+function ending1() {
+  push();
+  textSize(50);
+  fill(200, 50, 50);
+  stroke(0);
+  strokeWeight(5);
+  textAlign(CENTER, CENTER);
+  text(`All Balls Lost`, width / 2, height / 2);
+  pop();
+}
 
-  function ending2() {
-    push();
-    textSize(50);
-    fill(255, 25, 25);
-    stroke(0);
-    strokeWeight(5);
-    textAlign(CENTER, CENTER);
-    text(`Damaged By`, width / 2, height / 2);
-    pop();
+function ending2() {
+  push();
+  textSize(35);
+  fill(255, 25, 25);
+  stroke(0);
+  strokeWeight(5);
+  textAlign(CENTER, CENTER);
+  text(`Juggled Enough Times, You Win`, width / 2, height / 2);
+  pop();
+}
+
+function mousePressed() {
+  if (state === `title`) {
+    state = `juggling`;
   }
 }

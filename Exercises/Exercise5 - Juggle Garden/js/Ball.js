@@ -10,9 +10,11 @@ class Ball {
     this.size = 40;
     this.active = true;
   }
+
   gravity(force) {
     this.ay = this.ay + force;
   }
+
   move() {
     this.vx = this.vx + this.ax;
     this.vy = this.vy + this.ay;
@@ -27,6 +29,7 @@ class Ball {
       this.active = false;
     }
   }
+
   bounce(paddle) {
     if (
       this.x > paddle.x - paddle.width / 2 &&
@@ -48,5 +51,9 @@ class Ball {
     stroke(0);
     ellipse(this.x, this.y, this.size);
     pop();
+  }
+
+  border() {
+    this.x = constrain(this.x, 0, width);
   }
 }

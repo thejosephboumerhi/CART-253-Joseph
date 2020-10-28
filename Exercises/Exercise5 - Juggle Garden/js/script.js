@@ -4,7 +4,7 @@ Joseph Boumerhi
 
 Simulates juggling via paddle
 **************************************************/
-"use: strict";
+"use strict";
 
 let state = "title";
 
@@ -28,6 +28,31 @@ function setup() {
 
 function draw() {
   background(0);
+
+  if (state === `title`) {
+    title();
+  } else if (state === `juggling`) {
+    simulation();
+  } else if (state === `ending1`) {
+    ending1();
+  } else if (state === `ending2`) {
+    ending2();
+  }
+}
+
+function title() {
+  push();
+  textSize(50);
+  fill(50, 200, 50);
+  stroke(0);
+  strokeWeight(5);
+  textAlign(CENTER, CENTER);
+  text(`Game Of Juggles`, width / 2, height / 2);
+  pop();
+}
+
+//Runs things during the "juggling" state
+function juggling() {
   paddle.move();
   paddle.display();
 
@@ -39,5 +64,27 @@ function draw() {
       ball.bounce(paddle);
       ball.display();
     }
+  }
+
+  function ending1() {
+    push();
+    textSize(50);
+    fill(200, 50, 50);
+    stroke(0);
+    strokeWeight(5);
+    textAlign(CENTER, CENTER);
+    text(`All Balls Lost`, width / 2, height / 2);
+    pop();
+  }
+
+  function ending2() {
+    push();
+    textSize(50);
+    fill(255, 25, 25);
+    stroke(0);
+    strokeWeight(5);
+    textAlign(CENTER, CENTER);
+    text(`Damaged By`, width / 2, height / 2);
+    pop();
   }
 }

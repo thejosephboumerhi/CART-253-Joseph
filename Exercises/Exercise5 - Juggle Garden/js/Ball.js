@@ -7,8 +7,10 @@ class Ball {
     this.ax = 0;
     this.ay = 0;
     this.maxSpeed = 10;
-    this.size = 40;
+    this.size = 50;
     this.active = true;
+    this.counter = 0;
+    this.victoryCounter = 40;
   }
 
   gravity(force) {
@@ -38,10 +40,12 @@ class Ball {
       this.y < paddle.y + paddle.height / 2
     ) {
       let dx = this.x - paddle.x;
-      this.vx = this.vx + map(dx, -paddle.width / 2, paddle.width / 2, -2, 2);
+      this.vx = this.vx + map(dx, -paddle.width / 2, paddle.width / 2, -6, 6);
 
       this.vy = -this.vy;
       this.ay = 0;
+
+      bounceCounter++;
     }
   }
 

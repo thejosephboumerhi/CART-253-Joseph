@@ -12,7 +12,10 @@ let gravityForce = 0.0025;
 let paddle;
 
 let balls = [];
-let numBalls = 3;
+let numBalls = 4;
+
+let bounceCounter = 0;
+let victoryCounter = 60;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -31,6 +34,7 @@ function draw() {
 
   if (state === `title`) {
     title();
+    controls();
   } else if (state === `juggling`) {
     juggling();
   } else if (state === `ending1`) {
@@ -50,11 +54,26 @@ function title() {
   text(`Game Of Juggles`, width / 2, height / 2);
   pop();
 }
+function controls() {
+  push();
+  textSize(30);
+  fill(50, 200, 50);
+  stroke(0);
+  strokeWeight(5);
+  textAlign(CENTER, BASELINE);
+  text(
+    `Press Spacebar to switch between mouse or AD on keyboard`,
+    width / 2,
+    500
+  );
+  pop();
+}
 
 //Runs things during the "juggling" state
 function juggling() {
   paddle.move();
   paddle.display();
+  paddle.border();
 
   for (let i = 0; i < balls.length; i++) {
     let ball = balls[i];
@@ -88,6 +107,20 @@ function ending2() {
   textAlign(CENTER, CENTER);
   text(`Juggled Enough Times, You Win`, width / 2, height / 2);
   pop();
+}
+
+//function winConditon () {
+//if
+//}
+
+function keyPressed() {
+  if (keyIsDown(32)) {
+    if (paddle.controllerState === "mouse") {
+      paddle.controllerState = "keyboard";
+    } else {
+      paddle.controllerState = "mouse";
+    }
+  }
 }
 
 function mousePressed() {

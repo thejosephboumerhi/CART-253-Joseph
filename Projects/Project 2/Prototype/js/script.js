@@ -1,20 +1,39 @@
 /**************************************************
-Template p5 project
-Pippin Barr
+Project 2: Prototype
+Joseph Boumerhi
 
-Here is a description of this template p5 project.
+Prototyping of a TDP shooter
 **************************************************/
-
-// setup()
+let state = `any`;
+let enemyGroup = [];
+let enemyNum = 2;
 //
-// Description of setup() goes here.
 function setup() {
-
+  createCanvas(windowWidth, windowHeight);
 }
 
-// draw()
 //
-// Description of draw() goes here.
 function draw() {
+  background(175, 150, 150);
 
+  if (state === `titleMenu`) {
+    titleMenu();
+  } else if (state === `inGame`) {
+    gameplay();
+  } else if (state === `endGame`) {
+    gameOver();
+  }
 }
+//
+function title() {
+  push();
+  pop();
+}
+function gameOver() {
+  push();
+  pop();
+}
+//
+function gameplay() {}
+//
+//function reset() {;}

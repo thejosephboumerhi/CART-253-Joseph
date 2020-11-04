@@ -15,6 +15,7 @@ class Player {
 
   //
   movementInput() {
+    //Reusing good old movement inputs
     if (keyIsDown(65)) {
       this.ax = -this.accel;
     } else if (keyIsDown(68)) {
@@ -30,8 +31,7 @@ class Player {
       this.ay = 0;
     }
 
-    //Pippin proposed the variable "friction" from previous assignment,
-    //which allows for smoother WASD movement.
+    //Allows for smoother WASD movement.
     this.vx = this.vx * this.friction;
     this.vy = this.vy * this.friction;
 
@@ -47,7 +47,13 @@ class Player {
   display() {
     push();
     imageMode(CENTER);
-    image(playerImg, this.x, this.y);
+    image(playerImg, this.x, this.y, this.size, this.size);
+    //
+    if (this.x > mouseX) {
+      image(playerImg, this.x, this.y, this.size, this.size);
+    } else if (this.x < mouseX) {
+      image(playerImg, this.x, this.y, -this.size, this.size);
+    }
     pop();
   }
 
@@ -58,7 +64,15 @@ class Player {
     pop();
   }
 
-  weapon() {}
+  weapon() {
+    let i;
+    for (i = 0; i < projectileOut; i++) {
+      let x = this.x;
+      let y = this.y;
+      let projectile = new PlayerProjectile(x, y);
+      projectileOut.push(projectile);
+    }
+  }
 
   border() {
     this.x = constrain(this.x, 0, width);

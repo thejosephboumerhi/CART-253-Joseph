@@ -1,5 +1,6 @@
+//Used "bullet" example from Discord
 class PlayerProjectile {
-  constructor() {
+  constructor(x, y) {
     this.x = -75;
     this.y = -75;
     this.vx = 0;

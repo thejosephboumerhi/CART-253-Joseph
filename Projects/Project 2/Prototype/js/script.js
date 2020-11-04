@@ -9,9 +9,11 @@ let state = `title`;
 
 let player;
 
+//Enemy array, two spawn
 let enemyGroup = [];
 let enemyNum = 2;
 
+//Projectile array, semi-auto firing
 let projectileOut = [];
 let projectileShot = 1;
 
@@ -37,7 +39,7 @@ function setup() {
   }
 }
 
-//
+//Starts with title, then gameplay, finally GameOver
 function draw() {
   background(175, 150, 150);
 
@@ -50,7 +52,7 @@ function draw() {
   }
 }
 
-//Usual text for states,
+//The usual text for the states
 function title() {
   push();
   textSize(60);
@@ -73,13 +75,12 @@ function gameOver() {
   pop();
 }
 
-//Game starts, player could now play and enemies spawn
+//Game starts, player could now play, enemies spawn, shots could be fired
 function gameplay() {
   player.movementInput();
   player.display();
   player.cursor();
   player.border();
-  player.weapon();
 
   for (let i = 0; i < enemyGroup.length; i++) {
     let enemy = enemyGroup[i];
@@ -88,12 +89,19 @@ function gameplay() {
       enemy.chase();
       enemy.attackOverlap();
     }
+    for (let j = 0; j < projectileOut.length; j++) {
+      let projectile = projectileOut[j];
+      projectile.projectile();
+      projectile.collision(enemy);
+    }
   }
 }
 
-//Begins game
+//Begins game, afterward, you click to shoot
 function mousePressed() {
   if (state === `title`) {
     state = `inGame`;
+  } else if (state === `inGame`) {
+    player.weaponAim();
   }
 }

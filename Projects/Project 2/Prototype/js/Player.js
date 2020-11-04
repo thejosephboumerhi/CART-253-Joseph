@@ -2,7 +2,7 @@ class Player {
   constructor(x, y) {
     this.x = 0;
     this.y = 0;
-    this.size = 40;
+    this.size = 60;
     this.vx = 0;
     this.vy = 0;
     this.ax = 0;
@@ -10,12 +10,13 @@ class Player {
     this.accel = 3;
     this.MaxV = 12;
     this.friction = 0.9;
-    this.active = true;
+    //this.health = 100; To use later
+    //this.attacked = true; To use later
   }
 
-  //
+  //Lets player move efficiently
   movementInput() {
-    //Reusing good old movement inputs
+    //Reusing good old movement inputs, since I find it's been fairly effective
     if (keyIsDown(65)) {
       this.ax = -this.accel;
     } else if (keyIsDown(68)) {
@@ -44,11 +45,13 @@ class Player {
     this.vy = constrain(this.vy, -this.MaxV, this.MaxV);
   }
 
+  //Shows player image, and makes them face in the direction of the mouse
   display() {
     push();
     imageMode(CENTER);
     image(playerImg, this.x, this.y, this.size, this.size);
-    //
+
+    //Faces in the direction (although current shape form won't show it)
     if (this.x > mouseX) {
       image(playerImg, this.x, this.y, this.size, this.size);
     } else if (this.x < mouseX) {
@@ -57,23 +60,25 @@ class Player {
     pop();
   }
 
+  //Shows custom cursor
   cursor() {
     push();
+    noCursor();
     imageMode(CENTER);
     image(cursorImg, mouseX, mouseY);
     pop();
   }
 
-  weapon() {
-    let i;
-    for (i = 0; i < projectileOut; i++) {
-      let x = this.x;
-      let y = this.y;
-      let projectile = new PlayerProjectile(x, y);
-      projectileOut.push(projectile);
-    }
+  //Pushes and lets you shoot bullets
+  weaponAim() {
+    let i = 0;
+    let x = this.x;
+    let y = this.y;
+    let projectile = new PlayerProjectile(x, y);
+    projectileOut.push(projectile);
   }
 
+  //Usual border block
   border() {
     this.x = constrain(this.x, 0, width);
     this.y = constrain(this.y, 0, height);

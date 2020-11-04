@@ -1,52 +1,43 @@
-//Used "bullet" example from Discord
+//Used a chunk of "bullet" example from the class Discord
 class PlayerProjectile {
   constructor(x, y) {
-    this.x = -75;
-    this.y = -75;
-    this.vx = 0;
-    this.vy = 0;
-    this.speed = 20;
+    this.x = x;
+    this.y = y;
+    this.vx = 2;
+    this.vy = 2;
+    this.speed = 2;
     this.size = 20;
-    this.fired = false;
+    this.angle = 0;
+    this.fired = true;
+    this.active = true;
   }
 
-  projectile() {
+  //Checks for bullet collision onto the enemy, if so, kill enemy
+  collision(enemy) {
+    let subdue = dist(this.x, this.y, enemy.x, enemy.y);
+    if (this.fired && enemy.active && subdue < this.size / 2 + enemy.size / 2) {
+      // Kill the enemy that said bullet hit
+      enemy.active = false;
+    }
+  }
+
+  //Lets the projectile take shape, and fly (albeit not towards cursor yet)
+  projectile(enemy) {
     this.x += this.vx;
     this.y += this.vy;
 
     if (this.x > width) {
-      this.fired = false;
+      this.active = false;
+    } else if (this.y > height) {
+      this.active = false;
     }
 
-    let d = dist(this.x, this.y, enemy.x, enemy.y);
-    if (this.fired && enemy.active && d < this.size / 2 + enemy.size / 2) {
-      // Stop the this
-      this.fired = false;
-      // Kill the enemy
-      enemy.active = false;
-    }
-
-    fill(255);
+    //Gray round projectile
+    fill(75);
     ellipse(this.x, this.y, this.size);
 
     if (this.fired) {
       ellipse(this.x, this.y, this.size);
     }
-
-    if (enemy.active) {
-      fill(255, 0, 0);
-      ellipse(enemy.x, enemy.y, enemy.size);
-    }
-  }
-
-  mousePressed() {
-    if (this.fired) {
-      return;
-    }
-
-    this.fired = true;
-    this.x = this.x;
-    this.y = this.y;
-    this.vx = this.speed;
   }
 }

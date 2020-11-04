@@ -2,7 +2,7 @@ class Enemy {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.size = 60;
+    this.size = 50;
     this.vx = 0;
     this.vy = 0;
     this.ax = 0;
@@ -11,8 +11,10 @@ class Enemy {
     this.MaxV = 6;
     this.friction = 0.95;
     this.active = true;
+    //this.allDead = false; To be used later
   }
 
+  //Shows "bright red" enemies
   display() {
     push();
     fill(255, 0, 0);
@@ -20,6 +22,7 @@ class Enemy {
     pop();
   }
 
+  //Lets enemy chase player, decided to give accel and friction too
   chase() {
     let cx = this.x - player.x;
     let cy = this.y - player.y;
@@ -48,10 +51,13 @@ class Enemy {
     this.vy = constrain(this.vy, -this.MaxV, this.MaxV);
   }
 
+  //Get hit, game over (will likely be modified when I work on health later)
   attackOverlap() {
     let a = dist(player.x, player.y, this.x, this.y);
     if (a < this.size / 2 + player.size / 2) {
       state = `endGame`;
     }
   }
+
+  //waveSpawn() {} To be used later
 }

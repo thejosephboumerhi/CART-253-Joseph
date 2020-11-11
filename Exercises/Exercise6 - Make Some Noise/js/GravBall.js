@@ -1,0 +1,40 @@
+class GravBall extends Ball {
+  constructor(x, y, note) {
+    super(x, y, note);
+    this.x = x;
+    this.y = y;
+    this.size = 50;
+    this.fill = 0;
+    this.speed = 3;
+    this.vx = random(-this.speed, this.speed);
+    this.vy = random(-this.speed, this.speed);
+
+    //For oscillation
+    this.oscillator = new p5.Oscillator();
+    this.nearFreq = 220;
+    this.farFreq = 440;
+    this.oscillator.amp(0.025);
+    this.oscillator.start();
+
+    //For Synth
+    this.note = note;
+    this.synth = new p5.PolySynth();
+  }
+
+  move() {
+    this.x += this.vx;
+    this.y += this.vy;
+
+    //Adjusts oscillator freq. depending on distance of the center of the canvas
+    let d = dist(this.x, this.y, width / 2, height / 2);
+    let maxDist = dist(0, 0, width / 2, height / 2);
+    let newFreq = map(d, 0, maxDist, this.nearFreq, this.farFreq);
+    this.oscillator.freq(newFreq);
+  }
+
+  display() {
+    pop();
+    ellipse(this.x, this.y, this.size);
+    push();
+  }
+}

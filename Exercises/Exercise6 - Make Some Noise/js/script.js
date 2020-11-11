@@ -1,5 +1,5 @@
 /*****************************************************************
-09-P5 Sound Activity
+Exercise 09 - Make Some Noise
 Joseph Boumerhi
 
 Simple Sound Activity, plays sound(s), could be used for music(?)

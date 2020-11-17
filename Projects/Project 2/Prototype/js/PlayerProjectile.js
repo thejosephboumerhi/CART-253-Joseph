@@ -1,13 +1,13 @@
 //Used a chunk of "bullet" example from the class Discord
 class PlayerProjectile {
-  constructor(x, y) {
+  constructor(x, y, angle) {
     this.x = x;
     this.y = y;
     this.vx = 2;
     this.vy = 2;
     this.speed = 2;
     this.size = 20;
-    this.angle = 0;
+    this.angle = angle;
     this.fired = true;
     this.active = true;
   }
@@ -23,6 +23,9 @@ class PlayerProjectile {
 
   //Lets the projectile take shape, and fly (albeit not towards cursor yet)
   projectile(enemy) {
+    this.vx = this.speed * cos(this.angle);
+    this.vy = this.speed * sin(this.angle);
+
     this.x += this.vx;
     this.y += this.vy;
 

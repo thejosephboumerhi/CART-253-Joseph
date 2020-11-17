@@ -45,6 +45,7 @@ function draw() {
 
   if (state === `title`) {
     title();
+    //menu();
   } else if (state === `inGame`) {
     gameplay();
   } else if (state === `endGame`) {
@@ -89,9 +90,10 @@ function gameplay() {
       enemy.chase();
       enemy.attackOverlap();
     }
+    //if enemy = enemyGroup[i];
     for (let j = 0; j < projectileOut.length; j++) {
       let projectile = projectileOut[j];
-      projectile.projectile();
+      projectile.projectile(enemy);
       projectile.collision(enemy);
     }
   }

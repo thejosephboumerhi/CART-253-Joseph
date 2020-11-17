@@ -47,7 +47,7 @@ class Player {
 
   //Shows player image, and makes them face in the direction of the mouse
   display() {
-    push();
+    pop();
     imageMode(CENTER);
     image(playerImg, this.x, this.y, this.size, this.size);
 
@@ -57,7 +57,7 @@ class Player {
     } else if (this.x < mouseX) {
       image(playerImg, this.x, this.y, -this.size, this.size);
     }
-    pop();
+    push();
   }
 
   //Shows custom cursor
@@ -71,11 +71,23 @@ class Player {
 
   //Pushes and lets you shoot bullets
   weaponAim() {
-    let i = 0;
     let x = this.x;
     let y = this.y;
-    let projectile = new PlayerProjectile(x, y);
+    let dx = x - mouseX;
+    let dy = y - mouseY;
+    let angle = atan(dy / dx);
+
+    if (dx > 0) {
+      angle += PI;
+    }
+
+    let projectile = new PlayerProjectile(x, y, angle);
+
+    projectile.speed = 10;
     projectileOut.push(projectile);
+    console.log(angle);
+
+    //if () {}
   }
 
   //Usual border block

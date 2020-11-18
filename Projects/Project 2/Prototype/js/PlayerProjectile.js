@@ -18,7 +18,7 @@ class PlayerProjectile {
     if (this.fired && enemy.active && subdue < this.size / 2 + enemy.size / 2) {
       // Kill the enemy that said bullet hit
       enemy.active = false;
-      enemy.numDead++;
+      numDead++;
     }
   }
 

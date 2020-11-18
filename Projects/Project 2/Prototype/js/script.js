@@ -90,11 +90,14 @@ function gameplay() {
   for (let i = 0; i < enemyGroup.length; i++) {
     let enemy = enemyGroup[i];
     if (enemy.active) {
+      let x = random(0, width);
+      let y = random(0, height);
       enemy.display();
       enemy.chase();
       enemy.attackOverlap();
+      waveSpawn(x, y);
     }
-    //if enemy = enemyGroup[i];
+
     for (let j = 0; j < projectileOut.length; j++) {
       let projectile = projectileOut[j];
       projectile.projectile(enemy);
@@ -104,10 +107,10 @@ function gameplay() {
 }
 
 function waveSpawn(x, y) {
-  if (numDead > 2 * enemyGroup.length) {
+  if (numDead === 2) {
     let x = random(0, width);
     let y = random(0, height);
-    this.numDead = 0;
+    numDead = 0;
     let enemy = new Enemy(x, y);
     enemyGroup.push(enemy);
     console.log(numDead);

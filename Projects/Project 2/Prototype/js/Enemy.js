@@ -11,7 +11,8 @@ class Enemy {
     this.MaxV = 6;
     this.friction = 0.95;
     this.active = true;
-    //this.allDead = false; To be used later
+    this.numDead = 2;
+    //Perhaps I will need to make a class for various enemies
   }
 
   //Shows "bright red" enemies
@@ -59,5 +60,12 @@ class Enemy {
     }
   }
 
-  //waveSpawn() {} To be used later
+  waveSpawn() {
+    if (this.numDead >= 2 * enemyGroup.length) {
+      let x = random(0, width);
+      let y = random(0, height);
+      let enemy = new Enemy(x, y);
+      enemyGroup.push(enemy);
+    }
+  }
 }

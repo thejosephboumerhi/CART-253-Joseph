@@ -22,7 +22,7 @@ let cursorImg;
 
 //Preloads assets
 function preload() {
-  playerImg = loadImage("assets/images/StockPlayer.png");
+  playerImg = loadImage("assets/images/PlayerCharacter.png");
   cursorImg = loadImage("assets/images/CursorV2.png");
 }
 
@@ -45,7 +45,7 @@ function draw() {
 
   if (state === `title`) {
     title();
-    //menu();
+    //menu(); a main menu for later?
   } else if (state === `inGame`) {
     gameplay();
   } else if (state === `endGame`) {
@@ -57,13 +57,15 @@ function draw() {
 function title() {
   push();
   textSize(60);
-  fill(50, 200, 50);
+  fill(75, 0, 130);
   stroke(0);
   strokeWeight(5);
   textAlign(CENTER, CENTER);
-  text(`StockholderTitle`, width / 2, height / 2);
+  text(`Neo-Tenebris`, width / 2, height / 2);
   pop();
 }
+
+//function howToPlay(){}, will be a tab in the main menu(?) to show instrucs.
 
 function gameOver() {
   push();
@@ -89,6 +91,7 @@ function gameplay() {
       enemy.display();
       enemy.chase();
       enemy.attackOverlap();
+      enemy.waveSpawn();
     }
     //if enemy = enemyGroup[i];
     for (let j = 0; j < projectileOut.length; j++) {

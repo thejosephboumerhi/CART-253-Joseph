@@ -2,7 +2,7 @@ class Player {
   constructor(x, y) {
     this.x = 0;
     this.y = 0;
-    this.size = 60;
+    this.size = 80;
     this.vx = 0;
     this.vy = 0;
     this.ax = 0;
@@ -47,17 +47,16 @@ class Player {
 
   //Shows player image, and makes them face in the direction of the mouse
   display() {
-    pop();
+    push();
     imageMode(CENTER);
-    image(playerImg, this.x, this.y, this.size, this.size);
+    translate(this.x, this.y);
 
     //Faces in the direction (although current shape form won't show it)
     if (this.x > mouseX) {
-      image(playerImg, this.x, this.y, this.size, this.size);
-    } else if (this.x < mouseX) {
-      image(playerImg, this.x, this.y, -this.size, this.size);
+      scale(-1, 1);
     }
-    push();
+    image(playerImg, 0, 0, this.size, -this.size);
+    pop();
   }
 
   //Shows custom cursor

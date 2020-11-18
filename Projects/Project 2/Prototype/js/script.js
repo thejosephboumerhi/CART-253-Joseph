@@ -12,6 +12,7 @@ let player;
 //Enemy array, two spawn
 let enemyGroup = [];
 let enemyNum = 2;
+let numDead = 0;
 
 //Projectile array, semi-auto firing
 let projectileOut = [];
@@ -84,6 +85,7 @@ function gameplay() {
   player.display();
   player.cursor();
   player.border();
+  waveSpawn();
 
   for (let i = 0; i < enemyGroup.length; i++) {
     let enemy = enemyGroup[i];
@@ -91,7 +93,6 @@ function gameplay() {
       enemy.display();
       enemy.chase();
       enemy.attackOverlap();
-      enemy.waveSpawn();
     }
     //if enemy = enemyGroup[i];
     for (let j = 0; j < projectileOut.length; j++) {
@@ -99,6 +100,17 @@ function gameplay() {
       projectile.projectile(enemy);
       projectile.collision(enemy);
     }
+  }
+}
+
+function waveSpawn(x, y) {
+  if (numDead > 2 * enemyGroup.length) {
+    let x = random(0, width);
+    let y = random(0, height);
+    this.numDead = 0;
+    let enemy = new Enemy(x, y);
+    enemyGroup.push(enemy);
+    console.log(numDead);
   }
 }
 

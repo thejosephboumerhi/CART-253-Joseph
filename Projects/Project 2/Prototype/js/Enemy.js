@@ -11,7 +11,6 @@ class Enemy {
     this.MaxV = 6;
     this.friction = 0.95;
     this.active = true;
-    this.numDead = 0;
     //Perhaps I will need to make a class for various enemies
   }
 
@@ -57,16 +56,6 @@ class Enemy {
     let a = dist(player.x, player.y, this.x, this.y);
     if (a < this.size / 2 + player.size / 2) {
       state = `endGame`;
-    }
-  }
-
-  waveSpawn() {
-    if (this.numDead > 2 * enemyGroup.length) {
-      let x = random(0, width);
-      let y = random(0, height);
-      this.numDead = 0;
-      let enemy = new Enemy(x, y);
-      enemyGroup.push(enemy);
     }
   }
 }

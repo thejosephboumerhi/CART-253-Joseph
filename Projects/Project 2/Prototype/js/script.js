@@ -107,10 +107,9 @@ function gameplay() {
 }
 
 function waveSpawn(x, y) {
-  if (numDead === 2) {
+  if (numDead == enemyGroup.length) {
     let x = random(0, width);
     let y = random(0, height);
-    numDead = 0;
     let enemy = new Enemy(x, y);
     enemyGroup.push(enemy);
     console.log(numDead);

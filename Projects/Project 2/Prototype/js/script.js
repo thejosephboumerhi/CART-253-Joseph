@@ -47,7 +47,9 @@ function draw() {
 
   if (state === `title`) {
     title();
-    //menu(); a main menu for later?
+    //} else if (state ===`howToPlay`){
+    //htp();
+    //}
   } else if (state === `inGame`) {
     gameplay();
   } else if (state === `endGame`) {
@@ -67,7 +69,7 @@ function title() {
   pop();
 }
 
-//function howToPlay(){}, will be a tab in the main menu(?) to show instrucs.
+//function htp(){}, will be a tab in the main menu(?) to show instrucs.
 
 function gameOver() {
   push();

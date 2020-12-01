@@ -84,8 +84,8 @@ function gameOver() {
 
 //Game starts, player could now play, enemies spawn, shots could be fired
 function gameplay() {
-  player.health();
   player.movementInput();
+  player.health();
   player.display();
   player.cursor();
   player.border();

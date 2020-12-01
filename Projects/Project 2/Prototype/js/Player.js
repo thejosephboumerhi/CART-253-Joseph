@@ -10,8 +10,10 @@ class Player {
     this.accel = 3;
     this.MaxV = 12;
     this.friction = 0.9;
-    //this.health = 100; To use later
-    //this.attacked = true; To use later
+    this.healthPercent = 100;
+    this.invinciTime = 0;
+    this.dashTime = 0;
+    this.dashCanceled = false;
   }
 
   //Lets player move efficiently
@@ -30,6 +32,14 @@ class Player {
       this.ay = this.accel;
     } else {
       this.ay = 0;
+    }
+
+    if (keyIsDown(32) && this.dashTime < 30) {
+      this.MaxV = 20;
+      this.dashTime++;
+    } else {
+      this.dashTime = 0;
+      this.MaxV = 12;
     }
 
     //Allows for smoother WASD movement.
@@ -69,6 +79,15 @@ class Player {
     pop();
   }
 
+  health() {
+    if (this.healthPercent <= 0) {
+      state = `endGame`;
+    }
+    push();
+    rect(width / 2, height / 3, this.healthPercent, 50);
+    pop();
+  }
+
   //Pushes and lets you shoot bullets, it now works, thanks to Pippin's help
   weaponAim() {
     //Shoots from player position
@@ -91,7 +110,7 @@ class Player {
     projectileOut.push(projectile);
   }
 
-  //dash() {}, later use
+  //dash() {}
 
   //Usual border block
   border() {

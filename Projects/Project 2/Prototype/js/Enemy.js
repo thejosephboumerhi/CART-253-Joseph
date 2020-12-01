@@ -54,8 +54,12 @@ class Enemy {
   //Get hit, game over (will likely be modified when I work on health later)
   attackOverlap() {
     let a = dist(player.x, player.y, this.x, this.y);
-    if (a < this.size / 2 + player.size / 2) {
-      state = `endGame`;
+    if (
+      a < this.size / 2 + player.size / 2 &&
+      player.invinciTime < frameCount
+    ) {
+      player.healthPercent -= 20;
+      player.invinciTime = frameCount + 60;
     }
   }
 }

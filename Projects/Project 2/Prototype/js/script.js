@@ -88,6 +88,7 @@ function gameplay() {
   player.display();
   player.cursor();
   player.border();
+  player.health();
   waveSpawn();
 
   //Lets each enemy have their properties, and at least an ability of continuing

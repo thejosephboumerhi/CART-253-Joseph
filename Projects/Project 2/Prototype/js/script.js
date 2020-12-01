@@ -84,11 +84,11 @@ function gameOver() {
 
 //Game starts, player could now play, enemies spawn, shots could be fired
 function gameplay() {
+  player.health();
   player.movementInput();
   player.display();
   player.cursor();
   player.border();
-  player.health();
   waveSpawn();
 
   //Lets each enemy have their properties, and at least an ability of continuing

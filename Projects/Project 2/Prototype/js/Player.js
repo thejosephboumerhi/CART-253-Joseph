@@ -8,7 +8,7 @@ class Player {
     this.ax = 0;
     this.ay = 0;
     this.accel = 3;
-    this.MaxV = 12;
+    this.MaxV = 9;
     this.friction = 0.9;
     this.healthPercent = 100;
     this.invinciTime = 0;
@@ -35,12 +35,23 @@ class Player {
     }
 
     if (keyIsDown(32) && this.dashTime < 30) {
-      this.MaxV = 20;
+      this.maxVel = 20;
       this.dashTime++;
-    } else {
-      this.dashTime = 0;
-      this.MaxV = 12;
+    } else if (keyIsDown(32) == false && this.dashTime != 0) {
+      this.maxVel = 9;
+      this.dashTime++;
+
+      if (this.dashTime > 60) {
+        this.dashTime = 0;
+      }
     }
+
+    push();
+    let w = abs(this.dashTime - 30);
+    fill(150, 150, 75);
+    rectMode(CENTER);
+    rect(width / 2, 50, w, 25);
+    pop();
 
     //Allows for smoother WASD movement.
     this.vx = this.vx * this.friction;
@@ -84,7 +95,9 @@ class Player {
       state = `endGame`;
     }
     push();
-    rect(width / 2, height / 3, this.healthPercent, 50);
+    fill(100, 200, 100);
+    rectMode(CENTER);
+    rect(width / 2, 25, this.healthPercent, 25);
     pop();
   }
 
@@ -109,8 +122,6 @@ class Player {
     projectile.speed = 10;
     projectileOut.push(projectile);
   }
-
-  //dash() {}
 
   //Usual border block
   border() {

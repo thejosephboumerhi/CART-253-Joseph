@@ -21,6 +21,7 @@ let projectileShot = 1;
 
 let playerImg;
 let cursorImg;
+let backgroundImg;
 
 //Preloads assets
 function preload() {

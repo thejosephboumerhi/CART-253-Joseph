@@ -34,6 +34,7 @@ class Player {
       this.ay = 0;
     }
 
+    //Allows player to be more evasive by dashing, has orange gauge display
     if (keyIsDown(32) && this.dashTime < 30) {
       this.maxVel = 20;
       this.dashTime++;
@@ -81,7 +82,7 @@ class Player {
     pop();
   }
 
-  //Shows custom cursor
+  //Shows custom cursor, hides
   cursor() {
     push();
     noCursor();
@@ -90,6 +91,7 @@ class Player {
     pop();
   }
 
+  //Health system, game overs when it reaches 0%, has green gauge display
   health() {
     if (this.healthPercent <= 0) {
       state = `endGame`;
@@ -102,6 +104,7 @@ class Player {
   }
 
   //Pushes and lets you shoot bullets, it now works, thanks to Pippin's help
+  //Will introduce frameCount to not allow the player to spam shots.
   weaponAim() {
     //Shoots from player position
     let x = this.x;

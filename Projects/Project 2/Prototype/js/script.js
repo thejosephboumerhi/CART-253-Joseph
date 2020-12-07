@@ -1,5 +1,5 @@
 /**************************************************
-Project 2: Prototype
+Project 2: Prototype --- Neo-Tenebris
 Joseph Boumerhi
 
 Prototyping of a TDP shooter

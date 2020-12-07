@@ -51,6 +51,9 @@ class RangedEnemy {
     this.vy = constrain(this.vy, -this.MaxV, this.MaxV);
   }
 
+  //Likely use something similar to player
+  //enemyProjectile(){}
+
   //Get hit, game over (will likely be modified when I work on health later)
   attackOverlap() {
     let a = dist(player.x, player.y, this.x, this.y);

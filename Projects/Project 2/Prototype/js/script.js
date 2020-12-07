@@ -5,9 +5,18 @@ Joseph Boumerhi
 Prototyping of a TDP shooter
 **************************************************/
 `use strict`;
+//Starting state, the main menu
 let state = `title`;
 
+//Player Variable
 let player;
+
+//Instructions for htp() function
+let instructions = `Press [WASD] to move around
+
+Press [Spacebar] to dash
+
+Use Mouse to look around, and left click to shoot`;
 
 //Enemy array, two spawn
 let enemyGroup = [];
@@ -19,14 +28,20 @@ let numDead = 0;
 let projectileOut = [];
 let projectileShot = 1;
 
+//Images for the game
 let playerImg;
 let cursorImg;
-let backgroundImg;
+//let playerArmImg;
+//let backgroundImg;
+let titleImg;
+//let meleeEnemyImg;
+//let rangedEnemyImg;
 
 //Preloads assets
 function preload() {
   playerImg = loadImage("assets/images/PlayerCharacter.png");
   cursorImg = loadImage("assets/images/CursorV2.png");
+  titleImg = loadImage("assets/images/Neo-Tenebris.png");
 }
 
 //One-Time Setup
@@ -61,6 +76,8 @@ function draw() {
 //The usual text for the states
 function title() {
   push();
+  imageMode(LEFT, CENTER);
+  image(titleImg, 0, 0);
   textSize(60);
   fill(75, 0, 130);
   stroke(0);
@@ -70,7 +87,18 @@ function title() {
   pop();
 }
 
-//function htp(){}, will be a tab in the main menu(?) to show instrucs.
+//function menuButtons() {}
+
+//function htp(){
+//push();
+//textSize(60);
+//fill(75, 0, 130);
+//stroke(0);
+//strokeWeight(5);
+//textAlign(CENTER, CENTER);
+//text(instructions, width / 2, height / 2);
+//pop();
+//}
 
 function gameOver() {
   push();
@@ -125,7 +153,7 @@ function waveSpawn(x, y) {
   }
 }
 
-//Begins game, afterward, you click to shoot
+//Mouse presses for menu, and left click to fire, dependant on state
 function mousePressed() {
   if (state === `title`) {
     state = `inGame`;

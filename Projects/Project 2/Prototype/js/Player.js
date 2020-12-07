@@ -123,7 +123,7 @@ class Player {
     projectileOut.push(projectile);
   }
 
-  //Usual border block
+  //Usual border block, simulates an arena
   border() {
     this.x = constrain(this.x, 0, width);
     this.y = constrain(this.y, 0, height);

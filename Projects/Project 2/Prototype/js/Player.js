@@ -74,12 +74,18 @@ class Player {
     imageMode(CENTER);
     translate(this.x, this.y);
 
-    //Faces in the playerImg in direction of mouseX, new playerImg,
+    //Faces the "Standing" and "Running" playerImgs in direction of mouseX, new playerImg,
     //thanks to Samuel's assistance
     if (this.x > mouseX) {
       scale(-1, 1);
     }
-    image(playerImg, 0, 0, this.size, -this.size);
+
+    //Lets running animation play while the player is moving, if otherwise, idle
+    if (keyIsDown(65) || keyIsDown(68) || keyIsDown(87) || keyIsDown(83)) {
+      image(playerRunImg, 0, 0, this.size, this.size);
+    } else {
+      image(playerImg, 0, 0, this.size, this.size);
+    }
     pop();
   }
 

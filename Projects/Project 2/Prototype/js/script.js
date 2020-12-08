@@ -40,13 +40,15 @@ let playerArmImg;
 let playerShotImg;
 let backgroundImg;
 let titleImg;
-//let meleeEnemyImg;
-//let rangedEnemyImg;
+let meleeEnemyImg;
+let rangedEnemyImg;
 let enemyShotImg;
+
+//p5.sound things
 
 //Preloads assets
 function preload() {
-  playerImg = loadImage("assets/images/PlayerCharacter.png");
+  playerImg = loadImage("assets/images/PlayerCharacterStanding.png");
   playerRunImg = loadImage("assets/images/PlayerCharacterRunning.gif");
   playerArmImg = loadImage("assets/images/WeaponArm.png");
   playerShotImg = loadImage("assets/images/UserBullet.gif");
@@ -67,6 +69,7 @@ function setup() {
     let x = random(0, width);
     let y = random(0, height);
     let enemy = new Enemy(x, y);
+    let rangedEnemy = new RangedEnemy(x, y);
     enemyGroup.push(enemy);
   }
 }
@@ -74,15 +77,18 @@ function setup() {
 //Starts with title, then gameplay, finally GameOver
 function draw() {
   background(175, 150, 150);
+  button = new Buttons();
 
   //Different states, and backgrounds running first to be in back layer
   if (state === `title`) {
     background(0);
+    cursor();
     title();
-    //} else if (state ===`howToPlay`){
-    background();
-    //htp();
-    //}
+    button.playButton();
+    button.howToPlayButton();
+  } else if (state === `howToPlay`) {
+    background(0);
+    htp();
   } else if (state === `inGame`) {
     background(backgroundImg);
     gameplay();
@@ -106,18 +112,18 @@ function title() {
   pop();
 }
 
-//function menuButtons() {}
+function menuButtons() {}
 
-//function htp(){
-//push();
-//textSize(60);
-//fill(75, 0, 130);
-//stroke(0);
-//strokeWeight(5);
-//textAlign(CENTER, CENTER);
-//text(instructions, width / 2, height / 2);
-//pop();
-//}
+function htp() {
+  push();
+  textSize(60);
+  fill(75, 0, 130);
+  stroke(0);
+  strokeWeight(5);
+  textAlign(CENTER, CENTER);
+  text(instructions, width / 2, height / 2);
+  pop();
+}
 
 function gameOver() {
   push();
@@ -180,4 +186,7 @@ function mousePressed() {
   } else if (state === `inGame`) {
     player.weaponAim();
   }
+
+  //Allows for the buttons to be used, alongside the state they change to when
+  //pressed on.
 }

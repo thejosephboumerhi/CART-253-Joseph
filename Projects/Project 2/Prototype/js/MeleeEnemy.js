@@ -18,6 +18,7 @@ class Enemy {
   display() {
     push();
     fill(255, 0, 0);
+    //image();
     ellipse(this.x, this.y, this.size);
     pop();
   }

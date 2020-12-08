@@ -14,6 +14,7 @@ class Player {
     this.invinciTime = 0;
     this.dashTime = 0;
     this.dashCanceled = false;
+    this.rateOfFire = 45;
   }
 
   //Lets player move efficiently

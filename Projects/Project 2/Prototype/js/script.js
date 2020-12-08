@@ -28,20 +28,34 @@ let numDead = 0;
 let projectileOut = [];
 let projectileShot = 1;
 
-//Images for the game
+//Projectile array, semi-auto firing
+//let enemyProjectileOut = [];
+//let enemyProjectileShot = 1;
+
+//Images for the game, made by using Piskel
 let playerImg;
+let playerRunImg;
 let cursorImg;
-//let playerArmImg;
-//let backgroundImg;
+let playerArmImg;
+let playerShotImg;
+let backgroundImg;
 let titleImg;
 //let meleeEnemyImg;
 //let rangedEnemyImg;
+let enemyShotImg;
 
 //Preloads assets
 function preload() {
   playerImg = loadImage("assets/images/PlayerCharacter.png");
+  playerRunImg = loadImage("assets/images/PlayerCharacterRunning.gif");
+  playerArmImg = loadImage("assets/images/WeaponArm.png");
+  playerShotImg = loadImage("assets/images/UserBullet.gif");
   cursorImg = loadImage("assets/images/CursorV2.png");
   titleImg = loadImage("assets/images/Neo-Tenebris.png");
+  backgroundImg = loadImage("assets/images/Arena.gif");
+  meleeEnemyImg = loadImage("assets/images/MeleeEnemy.gif");
+  rangedEnemyImg = loadImage("assets/images/RangedEnemy.gif");
+  enemyShotImg = loadImage("assets/images/EnemyBullet.gif");
 }
 
 //One-Time Setup
@@ -61,14 +75,19 @@ function setup() {
 function draw() {
   background(175, 150, 150);
 
+  //Different states, and backgrounds running first to be in back layer
   if (state === `title`) {
+    background(0);
     title();
     //} else if (state ===`howToPlay`){
+    background();
     //htp();
     //}
   } else if (state === `inGame`) {
+    background(backgroundImg);
     gameplay();
   } else if (state === `endGame`) {
+    background(0);
     gameOver();
   }
 }
@@ -154,6 +173,7 @@ function waveSpawn(x, y) {
 }
 
 //Mouse presses for menu, and left click to fire, dependant on state
+//Add buttons here with if-else statements?
 function mousePressed() {
   if (state === `title`) {
     state = `inGame`;

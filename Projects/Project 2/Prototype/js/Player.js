@@ -11,10 +11,9 @@ class Player {
     this.MaxV = 9;
     this.friction = 0.9;
     this.healthPercent = 100;
+    this.healthRegen = 20;
     this.invinciTime = 0;
     this.dashTime = 0;
-    this.dashCanceled = false;
-    this.rateOfFire = 45;
   }
 
   //Lets player move efficiently
@@ -37,7 +36,7 @@ class Player {
 
     //Allows player to be more evasive by dashing, has orange gauge display
     if (keyIsDown(32) && this.dashTime < 30) {
-      this.maxV = 20;
+      this.maxV = 30;
       this.dashTime++;
     } else if (keyIsDown(32) == false && this.dashTime != 0) {
       this.maxV = 9;
@@ -52,7 +51,7 @@ class Player {
     let w = abs(this.dashTime - 30);
     fill(150, 150, 75);
     rectMode(CENTER);
-    rect(width / 2, 50, w, 25);
+    rect(width / 2, 50, w * 2, 25);
     pop();
 
     //Allows for smoother WASD movement.
@@ -87,6 +86,11 @@ class Player {
       image(playerImg, 0, 0, this.size, this.size);
     }
     pop();
+
+    push();
+    image(playerArmImg, this.x, this.y, this.size, this.size);
+    rotate();
+    pop();
   }
 
   //Shows custom cursor, hides
@@ -99,14 +103,19 @@ class Player {
   }
 
   //Health system, game overs when it reaches 0%, has green gauge display
+  //the *4 doesn't affect the percent, but enlarges the gauge
   health() {
     if (this.healthPercent <= 0) {
       state = `endGame`;
     }
+
+    if (this.healthPercent < 100) {
+      this.healthPercent++;
+    }
     push();
     fill(100, 200, 100);
     rectMode(CENTER);
-    rect(width / 2, 25, this.healthPercent, 25);
+    rect(width / 2, 25, this.healthPercent * 4, 25);
     pop();
   }
 
@@ -127,10 +136,17 @@ class Player {
       angle += PI;
     }
 
+    //if ((rateOfFire = 45)) {
+    //}
     let projectile = new PlayerProjectile(x, y, angle);
 
     projectile.speed = 10;
     projectileOut.push(projectile);
+
+    push();
+    rotate(dx);
+    image(playerArmImg, this.x, this.y, this.size, this.size);
+    pop();
   }
 
   //Usual border block, simulates an arena

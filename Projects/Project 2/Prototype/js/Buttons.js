@@ -27,7 +27,7 @@ class Buttons {
   backToTitleButton() {
     push();
     fill(200);
-    rect(500, 500, this.w, this.h);
+    rect(width / 1.5, height / 1.5, this.w, this.h);
     pop();
   }
 }

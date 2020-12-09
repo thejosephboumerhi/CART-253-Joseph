@@ -37,11 +37,10 @@ class PlayerProjectile {
     }
 
     //Gray round projectile
-    fill(75);
-    ellipse(this.x, this.y, this.size);
+    image(playerShotImg, this.x, this.y, this.size, this.size);
 
     if (this.fired) {
-      ellipse(this.x, this.y, this.size);
+      image(playerShotImg, this.x, this.y, this.size, this.size);
     }
   }
 }

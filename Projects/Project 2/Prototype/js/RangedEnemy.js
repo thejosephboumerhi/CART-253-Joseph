@@ -11,7 +11,6 @@ class RangedEnemy {
     this.MaxV = 4;
     this.friction = 0.95;
     this.active = true;
-    //Later I will need to make a class + inheritance for various enemies
   }
 
   //Shows "bright red" enemies, likely to change soon, with its own sprite

@@ -24,11 +24,13 @@ let enemyNum = 2;
 //For spawning
 let numDead = 0;
 
-//Projectile array, semi-auto firing
+//Player projectile array, semi-auto firing
 let projectileOut = [];
 let projectileShot = 1;
 
-//Projectile array, semi-auto firing
+this.rateOfFire = 45;
+
+//Enemy projectile array, semi-auto firing
 //let enemyProjectileOut = [];
 //let enemyProjectileShot = 1;
 
@@ -44,7 +46,18 @@ let meleeEnemyImg;
 let rangedEnemyImg;
 let enemyShotImg;
 
-//p5.sound things
+//p5.sound (for SFX)
+
+//For oscillation
+//this.oscillator = new p5.Oscillator();
+//this.nearFreq = 220;
+//this.farFreq = 440;
+//this.oscillator.amp(0.025);
+//this.oscillator.start();
+
+//For Synth
+//this.note = note;
+//this.synth = new p5.PolySynth();
 
 //Preloads assets
 function preload() {
@@ -90,6 +103,7 @@ function draw() {
   } else if (state === `howToPlay`) {
     background(0);
     htp();
+    backToTitleButton();
   } else if (state === `inGame`) {
     background(backgroundImg);
     gameplay();
@@ -100,6 +114,8 @@ function draw() {
 }
 
 //The usual text for the states
+//Displays the title name, and a icon of the OC (the player character) for this
+//
 function title() {
   push();
   imageMode(LEFT, CENTER);
@@ -113,11 +129,13 @@ function title() {
   pop();
 }
 
+//
 function menuButtons() {}
 
+//
 function htp() {
   push();
-  textSize(60);
+  textSize(30);
   fill(75, 0, 130);
   stroke(0);
   strokeWeight(5);
@@ -126,6 +144,7 @@ function htp() {
   pop();
 }
 
+//Displays the GameOver text
 function gameOver() {
   push();
   textSize(60);
@@ -175,8 +194,12 @@ function waveSpawn(x, y) {
     let x = random(0, width);
     let y = random(0, height);
     let enemy = new Enemy(x, y);
+    let rangedEnemy = new RangedEnemy(x, y);
     enemyGroup.push(enemy);
+    enemyGroup.push(rangedEnemy);
   }
+  //Splice is necessary, since the game seemed to start slowing after "killing"
+  //a couple of enemies using the temporary spawn system.
 }
 
 //Mouse presses for menu, and left click to fire, dependant on state

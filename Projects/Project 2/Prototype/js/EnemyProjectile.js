@@ -1,5 +1,5 @@
-//Used a chunk of "bullet" example from the class Discord
-class PlayerProjectile {
+//Reused PlayerProjectile, adjusted values and
+class EnemyProjectile {
   constructor(x, y, angle) {
     this.x = x;
     this.y = y;
@@ -12,18 +12,17 @@ class PlayerProjectile {
     this.active = true;
   }
 
-  //Checks for bullet collision onto the enemy, if so, kill enemy
-  collision(enemy) {
-    let subdue = dist(this.x, this.y, enemy.x, enemy.y);
-    if (this.fired && enemy.active && subdue < this.size / 2 + enemy.size / 2) {
-      // Kill the enemy that said bullet hit
-      enemy.active = false;
-      numDead++;
+  //Checks for bullet collision onto the player, if so, damage the player
+  collision(player) {
+    let subdue = dist(this.x, this.y, player.x, player.y);
+    if (this.fired && subdue < this.size / 2 + enemy.size / 2) {
+      //Hurt the player
+      player.healthPercent - 20;
     }
   }
 
-  //Lets the projectile take shape, and fly, now functions with weaponAim();
-  projectile(enemy) {
+  //Lets the projectile fly,
+  projectile(player) {
     this.vx = this.speed * cos(this.angle);
     this.vy = this.speed * sin(this.angle);
 
@@ -36,12 +35,11 @@ class PlayerProjectile {
       this.active = false;
     }
 
-    //Gray round projectile
-    fill(75);
-    ellipse(this.x, this.y, this.size);
+    //Red electric projectile
+    image(enemyShotImg, this.x, this.y, this.size, this.size);
 
     if (this.fired) {
-      ellipse(this.x, this.y, this.size);
+      image(enemyShotImg, this.x, this.y, this.size, this.size);
     }
   }
 }

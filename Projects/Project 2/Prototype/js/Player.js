@@ -37,10 +37,10 @@ class Player {
 
     //Allows player to be more evasive by dashing, has orange gauge display
     if (keyIsDown(32) && this.dashTime < 30) {
-      this.maxVel = 20;
+      this.maxV = 20;
       this.dashTime++;
     } else if (keyIsDown(32) == false && this.dashTime != 0) {
-      this.maxVel = 9;
+      this.maxV = 9;
       this.dashTime++;
 
       if (this.dashTime > 60) {

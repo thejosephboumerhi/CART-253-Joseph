@@ -68,9 +68,12 @@ function setup() {
   for (i = 0; i < enemyNum; i++) {
     let x = random(0, width);
     let y = random(0, height);
+    x = random(0, width);
+    y = random(0, height);
     let enemy = new Enemy(x, y);
     let rangedEnemy = new RangedEnemy(x, y);
     enemyGroup.push(enemy);
+    enemyGroup.push(rangedEnemy);
   }
 }
 
@@ -155,6 +158,9 @@ function gameplay() {
       enemy.display();
       enemy.chase();
       enemy.attackOverlap();
+      rangedEnemy.display();
+      rangedEnemy.chase();
+      rangedEnemy.attackOverlap();
       waveSpawn(x, y);
     }
 

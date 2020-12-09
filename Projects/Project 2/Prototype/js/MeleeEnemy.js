@@ -2,7 +2,7 @@ class Enemy {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.size = 50;
+    this.size = 80;
     this.vx = 0;
     this.vy = 0;
     this.ax = 0;
@@ -17,9 +17,7 @@ class Enemy {
   //Shows "bright red" enemies, likely to change soon, with its own sprite
   display() {
     push();
-    fill(255, 0, 0);
-    //image();
-    ellipse(this.x, this.y, this.size);
+    image(meleeEnemyImg, this.x, this.y, this.size, this.size);
     pop();
   }
 

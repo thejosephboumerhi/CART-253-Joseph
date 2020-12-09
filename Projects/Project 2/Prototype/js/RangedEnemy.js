@@ -2,13 +2,13 @@ class RangedEnemy {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.size = 50;
+    this.size = 75;
     this.vx = 0;
     this.vy = 0;
     this.ax = 0;
     this.ay = 0;
-    this.accel = 2;
-    this.MaxV = 6;
+    this.accel = 1;
+    this.MaxV = 4;
     this.friction = 0.95;
     this.active = true;
     //Later I will need to make a class + inheritance for various enemies
@@ -17,9 +17,7 @@ class RangedEnemy {
   //Shows "bright red" enemies, likely to change soon, with its own sprite
   display() {
     push();
-    fill(255, 0, 0);
-    //image();
-    ellipse(this.x, this.y, this.size);
+    image(rangedEnemyImg, this.x, this.y, this.size, this.size);
     pop();
   }
 

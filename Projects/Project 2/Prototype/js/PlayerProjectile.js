@@ -6,7 +6,7 @@ class PlayerProjectile {
     this.vx = 2;
     this.vy = 2;
     this.speed = 2;
-    this.size = 20;
+    this.size = 30;
     this.angle = angle;
     this.fired = true;
     this.active = true;
@@ -18,6 +18,8 @@ class PlayerProjectile {
     if (this.fired && enemy.active && subdue < this.size / 2 + enemy.size / 2) {
       // Kill the enemy that said bullet hit
       enemy.active = false;
+      this.active = false;
+      this.fired = false;
       numDead++;
     }
   }

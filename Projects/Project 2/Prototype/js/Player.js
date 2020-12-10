@@ -85,9 +85,16 @@ class Player {
     } else {
       image(playerImg, 0, 0, this.size, this.size);
     }
+
+    pop();
+
+    push();
     imageMode(CENTER);
-    image(playerArmImg, this.x, this.y, this.size, this.size);
-    rotate(mouseX);
+    if (this.x > mouseX) {
+      scale(-1, 1);
+    } else {
+      image(playerArmImg, this.x, this.y, this.size, this.size);
+    }
     pop();
   }
 

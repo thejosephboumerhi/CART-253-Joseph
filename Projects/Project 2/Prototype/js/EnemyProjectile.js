@@ -18,6 +18,7 @@ class EnemyProjectile {
     if (this.fired && damage < this.size / 2 + enemy.size / 2) {
       //Hurt the player
       player.healthPercent - 30;
+      this.fired = true;
     }
   }
 

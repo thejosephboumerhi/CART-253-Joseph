@@ -195,16 +195,21 @@ function gameplay() {
 //Temporary spawn system, progress showing that "a spawn" is working, and will
 //be further updated
 function waveSpawn(x, y) {
-  if (numDead == enemyGroup.length) {
-    let x = random(0, width);
-    let y = random(0, height);
-    let enemy = new Enemy(x, y);
-    let rangedEnemy = new RangedEnemy(x, y);
-    enemyGroup.push(enemy);
-    enemyGroup.push(rangedEnemy);
+  for (let i = enemyGroup.length - 1; i > 0; i--) {
+    let enemy = enemyGroup[i];
+    if (enemy.active === false) {
+      enemyGroup.splice(i, 1);
+
+      let x = random(0, width);
+      let y = random(0, height);
+      let enemy = new Enemy(x, y);
+      let rangedEnemy = new RangedEnemy(x, y);
+      enemyGroup.push(enemy);
+      enemyGroup.push(rangedEnemy);
+    }
+    //Splice is necessary, since the game seemed to start slowing after "killing"
+    //a couple of enemies using the temporary spawn system.
   }
-  //Splice is necessary, since the game seemed to start slowing after "killing"
-  //a couple of enemies using the temporary spawn system.
 }
 
 //function titleTheme();

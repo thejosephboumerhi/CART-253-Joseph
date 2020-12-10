@@ -28,13 +28,11 @@ let numDead = 0;
 let projectileOut = [];
 let projectileShot = 1;
 
-this.rateOfFire = 45;
+//Enemy projectile array, slow firing
+let enemyProjectileOut = [];
+let enemyProjectileShot = 1;
 
-//Enemy projectile array, semi-auto firing
-//let enemyProjectileOut = [];
-//let enemyProjectileShot = 1;
-
-//Images for the game, made by using Piskel
+//Images for the game, made by me using Piskel, an online pixel editor
 let playerImg;
 let playerRunImg;
 let cursorImg;
@@ -184,8 +182,15 @@ function gameplay() {
       projectile.projectile(enemy);
       projectile.collision(enemy);
     }
+
+    //Lets each projectile have its properties
+    //  for (let e = 0; e < enemyprojectileOut.length; e++) {
+    //  let enemyProjectile = enemyProjectileOut[e];
+    //enemyProjectile.projectile(player);
+    //enemyProjectile.collision(player);
   }
 }
+//}
 
 //Temporary spawn system, progress showing that "a spawn" is working, and will
 //be further updated
@@ -202,14 +207,15 @@ function waveSpawn(x, y) {
   //a couple of enemies using the temporary spawn system.
 }
 
-//Mouse presses for menu, and left click to fire, dependant on state
-//Add buttons here with if-else statements?
-function mousePressed() {
-  //if (state === `title`) {
-  //state = `inGame`;
+//function titleTheme();
+//function arenaTheme();
+//function weaponSound();
 
+//Mouse presses for menu buttons, and to fire in game state, dependant on states
+function mousePressed() {
   //Allows for the buttons to be used, alongside the state they change to when
   //pressed on.
+
   if (
     mouseX > play.x &&
     mouseX < play.x + play.w &&
@@ -218,7 +224,7 @@ function mousePressed() {
     state === `title`
   ) {
     state = `inGame`;
-    console.log("Click!");
+    console.log("PLAYING!");
   }
 
   if (
@@ -229,7 +235,7 @@ function mousePressed() {
     state === `title`
   ) {
     state = `howToPlay`;
-    console.log("Click!");
+    console.log("Learning!");
   }
   if (
     mouseX > backToMenu.x &&
@@ -239,7 +245,7 @@ function mousePressed() {
     state === `howToPlay`
   ) {
     state = `title`;
-    console.log("Click!");
+    console.log("Back to menu!");
   } else if (state === `inGame`) {
     player.weaponAim();
   }

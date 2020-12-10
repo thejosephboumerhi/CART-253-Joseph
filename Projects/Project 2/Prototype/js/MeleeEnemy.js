@@ -14,7 +14,7 @@ class Enemy {
     //Later I will need to make a class + inheritance for various enemies
   }
 
-  //Shows "bright red" enemies, likely to change soon, with its own sprite
+  //Shows ghost-like enemies
   display() {
     push();
     image(meleeEnemyImg, this.x, this.y, this.size, this.size);

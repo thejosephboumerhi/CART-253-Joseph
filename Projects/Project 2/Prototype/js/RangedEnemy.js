@@ -13,7 +13,7 @@ class RangedEnemy {
     this.active = true;
   }
 
-  //Shows "bright red" enemies, likely to change soon, with its own sprite
+  //Shows orb-like enemies
   display() {
     push();
     image(rangedEnemyImg, this.x, this.y, this.size, this.size);
@@ -49,8 +49,30 @@ class RangedEnemy {
     this.vy = constrain(this.vy, -this.MaxV, this.MaxV);
   }
 
-  //Likely use something similar to player
-  //enemyProjectile(){}
+  //Basically player's weaponAim() copy-pasted, BUT instead it uses the player's
+  //position to shoot at them
+  enemyTargeting() {
+    //Shoots from enemy position
+    let x = this.x;
+    let y = this.y;
+
+    //Takes player.x and player.y values, and lets it be used for angle/degrees,
+    //so it can shoot the player
+    let tx = x - player.x;
+    let ty = y - player.y;
+    let angle = atan(ty / tx);
+
+    if (tx > 0) {
+      angle += PI;
+    }
+
+    //if ((rateOfFire = 45)) {
+    //}
+    let enemyProjectile = new EnemyProjectile(x, y, angle);
+
+    enemyProjectile.speed = 3;
+    enemyProjectileOut.push(enemyProjectile);
+  }
 
   //Get hit, game over (will likely be modified when I work on health later)
   attackOverlap() {

@@ -35,7 +35,7 @@ class Player {
     }
 
     //Allows player to be more evasive by dashing, has orange gauge display
-    if (keyIsDown(32) && this.dashTime < 30) {
+    if (keyIsDown(32) && this.dashTime < 60) {
       this.maxV = 30;
       this.dashTime++;
     } else if (keyIsDown(32) == false && this.dashTime != 0) {
@@ -85,11 +85,9 @@ class Player {
     } else {
       image(playerImg, 0, 0, this.size, this.size);
     }
-    pop();
-
-    push();
+    imageMode(CENTER);
     image(playerArmImg, this.x, this.y, this.size, this.size);
-    rotate();
+    rotate(mouseX);
     pop();
   }
 
@@ -142,11 +140,6 @@ class Player {
 
     projectile.speed = 10;
     projectileOut.push(projectile);
-
-    push();
-    rotate(dx);
-    image(playerArmImg, this.x, this.y, this.size, this.size);
-    pop();
   }
 
   //Usual border block, simulates an arena

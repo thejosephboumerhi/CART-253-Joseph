@@ -5,7 +5,7 @@ class EnemyProjectile {
     this.y = y;
     this.vx = 2;
     this.vy = 2;
-    this.speed = 2;
+    this.speed = 3;
     this.size = 20;
     this.angle = angle;
     this.fired = true;
@@ -14,10 +14,10 @@ class EnemyProjectile {
 
   //Checks for bullet collision onto the player, if so, damage the player
   collision(player) {
-    let subdue = dist(this.x, this.y, player.x, player.y);
-    if (this.fired && subdue < this.size / 2 + enemy.size / 2) {
+    let damage = dist(this.x, this.y, player.x, player.y);
+    if (this.fired && damage < this.size / 2 + enemy.size / 2) {
       //Hurt the player
-      player.healthPercent - 20;
+      player.healthPercent - 30;
     }
   }
 

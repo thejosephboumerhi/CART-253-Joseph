@@ -13,6 +13,11 @@ class HowToPlayButton extends Buttons {
     push();
     fill(200, 50, 50);
     rect(this.x, this.y, this.w, this.h);
+    textAlign(CENTER, CENTER);
+    textSize(25);
+    fill(75, 0, 130);
+    stroke(0);
+    text(`How To Play`, this.x, this.y, this.w, this.h);
     pop();
   }
 }

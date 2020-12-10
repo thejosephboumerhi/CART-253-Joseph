@@ -13,6 +13,11 @@ class PlayButton extends Buttons {
     push();
     fill(200, 200, 0);
     rect(this.x, this.y, this.w, this.h);
+    textAlign(CENTER, CENTER);
+    textSize(30);
+    fill(75, 0, 130);
+    stroke(0);
+    text(`Play`, this.x, this.y, this.w, this.h);
     pop();
   }
 }

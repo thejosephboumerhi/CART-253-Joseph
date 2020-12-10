@@ -92,18 +92,21 @@ function setup() {
 function draw() {
   background(175, 150, 150);
   button = new Buttons();
+  play = new PlayButton();
+  howToPlay = new HowToPlayButton();
+  backToMenu = new BackToTitleButton();
 
   //Different states, and backgrounds running first to be in back layer
   if (state === `title`) {
     background(0);
     cursor();
     title();
-    button.playButton();
-    button.howToPlayButton();
+    play.displayButton();
+    howToPlay.displayButton();
   } else if (state === `howToPlay`) {
     background(0);
     htp();
-    backToTitleButton();
+    backToMenu.displayButton();
   } else if (state === `inGame`) {
     background(backgroundImg);
     gameplay();
@@ -128,9 +131,6 @@ function title() {
   text(`Neo-Tenebris`, width / 2, height / 2);
   pop();
 }
-
-//
-function menuButtons() {}
 
 //
 function htp() {
@@ -205,12 +205,42 @@ function waveSpawn(x, y) {
 //Mouse presses for menu, and left click to fire, dependant on state
 //Add buttons here with if-else statements?
 function mousePressed() {
-  if (state === `title`) {
-    state = `inGame`;
-  } else if (state === `inGame`) {
-    player.weaponAim();
-  }
+  //if (state === `title`) {
+  //state = `inGame`;
 
   //Allows for the buttons to be used, alongside the state they change to when
   //pressed on.
+  if (
+    mouseX > play.x &&
+    mouseX < play.x + play.w &&
+    mouseY > play.y &&
+    mouseY < play.y + play.h &&
+    state === `title`
+  ) {
+    state = `inGame`;
+    console.log("Click!");
+  }
+
+  if (
+    mouseX > howToPlay.x &&
+    mouseX < howToPlay.x + howToPlay.w &&
+    mouseY > howToPlay.y &&
+    mouseY < howToPlay.y + howToPlay.h &&
+    state === `title`
+  ) {
+    state = `howToPlay`;
+    console.log("Click!");
+  }
+  if (
+    mouseX > backToMenu.x &&
+    mouseX < backToMenu.x + backToMenu.w &&
+    mouseY > backToMenu.y &&
+    mouseY < backToMenu.y + backToMenu.h &&
+    state === `howToPlay`
+  ) {
+    state = `title`;
+    console.log("Click!");
+  } else if (state === `inGame`) {
+    player.weaponAim();
+  }
 }

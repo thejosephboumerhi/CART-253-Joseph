@@ -66,10 +66,8 @@ function setup() {
   for (i = 0; i < enemyNum; i++) {
     let x = random(0, width);
     let y = random(0, height);
-    let enemy = new Enemy(x, y);
-    let rangedEnemy = new RangedEnemy(x, y);
+    let enemy = new HybridEnemy(x, y);
     enemyGroup.push(enemy);
-    enemyGroup.push(rangedEnemy);
   }
 
   button = new Buttons();
@@ -175,11 +173,11 @@ function gameplay() {
     }
 
     for (let e = enemyProjectileOut.length - 1; e >= 0; e--) {
-      let enemyProjectile = enemyProjectileOut[j];
+      let enemyProjectile = enemyProjectileOut[e];
       enemyProjectile.projectile(player);
       enemyProjectile.collision(player);
       if (enemyProjectile.active === false) {
-        enemyProjectileOut.splice(j, 1);
+        enemyProjectileOut.splice(e, 1);
       }
     }
   }
@@ -193,13 +191,10 @@ function waveSpawn() {
     let enemy = enemyGroup[i];
     if (enemy.active === false) {
       enemyGroup.splice(i, 1);
-
       let x = random(0, width);
       let y = random(0, height);
-      let enemy = new Enemy(x, y);
-      let rangedEnemy = new RangedEnemy(x, y);
+      let enemy = new HybridEnemy(x, y);
       enemyGroup.push(enemy);
-      enemyGroup.push(rangedEnemy);
     }
     //Splice is necessary, since the game seemed to start slowing after "killing"
     //a couple of enemies using the temporary spawn system.

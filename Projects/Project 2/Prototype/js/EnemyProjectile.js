@@ -15,9 +15,9 @@ class EnemyProjectile {
   //Checks for bullet collision onto the player, if so, damage the player
   collision(player) {
     let damage = dist(this.x, this.y, player.x, player.y);
-    if (this.fired && damage < this.size / 2 + enemy.size / 2) {
+    if (this.fired && damage < this.size / 2 + player.size / 2) {
       //Hurt the player
-      player.healthPercent - 30;
+      player.healthPercent - 20;
       this.active = false;
     }
   }
@@ -37,7 +37,6 @@ class EnemyProjectile {
     }
 
     //Red electric projectile
-    image(enemyShotImg, this.x, this.y, this.size, this.size);
 
     if (this.fired) {
       image(enemyShotImg, this.x, this.y, this.size, this.size);

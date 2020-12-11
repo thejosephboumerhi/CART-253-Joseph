@@ -81,8 +81,8 @@ class RangedEnemy {
       a < this.size / 2 + player.size / 2 &&
       player.invinciTime < frameCount
     ) {
-      player.healthPercent -= 10;
-      player.invinciTime = frameCount + 60;
+      player.healthPercent -= 20;
+      player.invinciTime = frameCount + 10;
     }
   }
 }

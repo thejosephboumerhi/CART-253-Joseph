@@ -1,4 +1,4 @@
-class Enemy {
+class HybridEnemy {
   constructor(x, y) {
     this.x = x;
     this.y = y;
@@ -50,6 +50,30 @@ class Enemy {
     this.vy = constrain(this.vy, -this.MaxV, this.MaxV);
   }
 
+  enemyTargeting() {
+    //Shoots from enemy position
+    let x = this.x;
+    let y = this.y;
+
+    //Takes player.x and player.y values, and lets it be used for angle/degrees,
+    //so it can shoot the player
+    let tx = x - player.x;
+    let ty = y - player.y;
+    let angle = atan(ty / tx);
+
+    if (tx > 0) {
+      angle += PI;
+    }
+
+    //if ((rateOfFire = 45)) {
+    //}
+
+    let enemyProjectile = new EnemyProjectile(x, y, angle);
+
+    enemyProjectile.speed = 3;
+    enemyProjectileOut.push(enemyProjectile);
+  }
+
   //Get hit, game over (will likely be modified when I work on health later)
   attackOverlap() {
     let a = dist(player.x, player.y, this.x, this.y);
@@ -57,8 +81,8 @@ class Enemy {
       a < this.size / 2 + player.size / 2 &&
       player.invinciTime < frameCount
     ) {
-      player.healthPercent -= 20;
-      player.invinciTime = frameCount + 60;
+      player.healthPercent -= 35;
+      player.invinciTime = frameCount + 10;
     }
   }
 }

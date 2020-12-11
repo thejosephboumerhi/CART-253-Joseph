@@ -38,10 +38,8 @@ class PlayerProjectile {
       this.active = false;
     }
 
-    //Gray round projectile
-    image(playerShotImg, this.x, this.y, this.size, this.size);
-
-    if (this.fired) {
+    //Green energy projectile
+    if (this.active) {
       image(playerShotImg, this.x, this.y, this.size, this.size);
     }
   }

@@ -44,19 +44,6 @@ let meleeEnemyImg;
 let rangedEnemyImg;
 let enemyShotImg;
 
-//p5.sound (for SFX)
-
-//For oscillation
-//this.oscillator = new p5.Oscillator();
-//this.nearFreq = 220;
-//this.farFreq = 440;
-//this.oscillator.amp(0.025);
-//this.oscillator.start();
-
-//For Synth
-//this.note = note;
-//this.synth = new p5.PolySynth();
-
 //Preloads assets
 function preload() {
   playerImg = loadImage("assets/images/PlayerCharacterStanding.png");
@@ -84,15 +71,16 @@ function setup() {
     enemyGroup.push(enemy);
     enemyGroup.push(rangedEnemy);
   }
+
+  button = new Buttons();
+  play = new PlayButton();
+  howToPlay = new HowToPlayButton();
+  backToMenu = new BackToTitleButton();
 }
 
 //Starts with title, then gameplay, finally GameOver
 function draw() {
   background(175, 150, 150);
-  button = new Buttons();
-  play = new PlayButton();
-  howToPlay = new HowToPlayButton();
-  backToMenu = new BackToTitleButton();
 
   //Different states, and backgrounds running first to be in back layer
   if (state === `title`) {
@@ -173,28 +161,34 @@ function gameplay() {
       enemy.display();
       enemy.chase();
       enemy.attackOverlap();
-      waveSpawn(x, y);
+      enemy.enemyTargeting();
     }
 
     //Lets each projectile have its properties
-    for (let j = 0; j < projectileOut.length; j++) {
+    for (let j = projectileOut.length - 1; j >= 0; j--) {
       let projectile = projectileOut[j];
       projectile.projectile(enemy);
       projectile.collision(enemy);
+      if (projectile.active === false) {
+        projectileOut.splice(j, 1);
+      }
     }
 
-    //Lets each projectile have its properties
-    //  for (let e = 0; e < enemyprojectileOut.length; e++) {
-    //  let enemyProjectile = enemyProjectileOut[e];
-    //enemyProjectile.projectile(player);
-    //enemyProjectile.collision(player);
+    for (let e = enemyProjectileOut.length - 1; e >= 0; e--) {
+      let enemyProjectile = enemyProjectileOut[j];
+      enemyProjectile.projectile(player);
+      enemyProjectile.collision(player);
+      if (enemyProjectile.active === false) {
+        enemyProjectileOut.splice(j, 1);
+      }
+    }
   }
 }
 //}
 
 //Temporary spawn system, progress showing that "a spawn" is working, and will
 //be further updated
-function waveSpawn(x, y) {
+function waveSpawn() {
   for (let i = enemyGroup.length - 1; i > 0; i--) {
     let enemy = enemyGroup[i];
     if (enemy.active === false) {
@@ -211,10 +205,6 @@ function waveSpawn(x, y) {
     //a couple of enemies using the temporary spawn system.
   }
 }
-
-//function titleTheme();
-//function arenaTheme();
-//function weaponSound();
 
 //Mouse presses for menu buttons, and to fire in game state, dependant on states
 function mousePressed() {

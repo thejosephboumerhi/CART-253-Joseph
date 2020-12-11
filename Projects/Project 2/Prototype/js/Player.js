@@ -35,16 +35,15 @@ class Player {
     }
 
     //Allows player to be more evasive by dashing, has orange gauge display
-    if (keyIsDown(32) && this.dashTime < 60) {
+    if (keyIsDown(32) && this.dashTime === 60) {
       this.maxV = 30;
-      this.dashTime++;
-    } else if (keyIsDown(32) == false && this.dashTime != 0) {
-      this.maxV = 9;
-      this.dashTime++;
+    } else if (this.dashTime > 0 && this.maxV === 30) {
+      this.dashTime--;
+    }
 
-      if (this.dashTime > 60) {
-        this.dashTime = 0;
-      }
+    if (this.dashTime === 0) {
+      this.maxV = 9;
+      this.dashTime = 60;
     }
 
     push();
@@ -86,14 +85,10 @@ class Player {
       image(playerImg, 0, 0, this.size, this.size);
     }
 
-    pop();
-
-    push();
-    imageMode(CENTER);
     if (this.x > mouseX) {
       scale(-1, 1);
     } else {
-      image(playerArmImg, this.x, this.y, this.size, this.size);
+      image(playerArmImg, 0, 0, this.size, this.size);
     }
     pop();
   }

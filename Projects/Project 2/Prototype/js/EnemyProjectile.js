@@ -6,7 +6,7 @@ class EnemyProjectile {
     this.vx = 2;
     this.vy = 2;
     this.speed = 3;
-    this.size = 20;
+    this.size = 30;
     this.angle = angle;
     this.fired = true;
     this.active = true;
@@ -18,7 +18,7 @@ class EnemyProjectile {
     if (this.fired && damage < this.size / 2 + enemy.size / 2) {
       //Hurt the player
       player.healthPercent - 30;
-      this.fired = true;
+      this.active = false;
     }
   }
 

@@ -11,6 +11,11 @@ let state = `title`;
 //Player Variable
 let player;
 
+//Font Variable
+let startEndFont;
+let buttonFont;
+let howToPlayFont;
+
 //Instructions for htp() function
 let instructions = `Press [WASD] to move around
 
@@ -23,6 +28,7 @@ let enemyGroup = [];
 let enemyNum = 2;
 //For spawning
 let numDead = 0;
+let numAlive = 0;
 
 //Player projectile array, semi-auto firing
 let projectileOut = [];
@@ -46,6 +52,15 @@ let enemyShotImg;
 
 //Preloads assets
 function preload() {
+  //All fonts from daFont
+  //https://www.dafont.com/vanishing.font
+  startEndFont = loadFont("assets/fonts/Vanishing.ttf");
+  //https://www.dafont.com/karmatic-arcade.font
+  buttonFont = loadFont("assets/fonts/ka1.ttf");
+  //https://www.dafont.com/vcr-osd-mono.font
+  howToPlayFont = loadFont("assets/fonts/VCR_OSD_MONO_1.001.ttf");
+
+  //Pixel Sprites
   playerImg = loadImage("assets/images/PlayerCharacterStanding.png");
   playerRunImg = loadImage("assets/images/PlayerCharacterRunning.gif");
   playerArmImg = loadImage("assets/images/WeaponArm.png");
@@ -107,12 +122,13 @@ function title() {
   push();
   imageMode(LEFT, CENTER);
   image(titleImg, 0, 0);
-  textSize(60);
-  fill(75, 0, 130);
+  textSize(40);
+  textFont(startEndFont);
+  fill(200, 0, 0);
   stroke(0);
   strokeWeight(5);
   textAlign(CENTER, CENTER);
-  text(`Neo-Tenebris`, width / 2, height / 2);
+  text(`Neo/Tenebris`, width / 2, height / 2);
   pop();
 }
 
@@ -120,7 +136,8 @@ function title() {
 function htp() {
   push();
   textSize(30);
-  fill(75, 0, 130);
+  textFont(howToPlayFont);
+  fill(200);
   stroke(0);
   strokeWeight(5);
   textAlign(CENTER, CENTER);
@@ -131,7 +148,8 @@ function htp() {
 //Displays the GameOver text
 function gameOver() {
   push();
-  textSize(60);
+  textSize(40);
+  textFont(startEndFont);
   fill(225, 25, 25);
   stroke(0);
   strokeWeight(5);

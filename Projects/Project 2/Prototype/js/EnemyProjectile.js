@@ -17,7 +17,8 @@ class EnemyProjectile {
     let damage = dist(this.x, this.y, player.x, player.y);
     if (this.fired && damage < this.size / 2 + player.size / 2) {
       //Hurt the player
-      player.healthPercent - 20;
+      player.healthPercent -= 6;
+      player.invinciTime = frameCount + 60;
       this.active = false;
     }
   }

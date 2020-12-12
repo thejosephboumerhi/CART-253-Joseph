@@ -4,6 +4,7 @@ class HowToPlayButton extends Buttons {
     super(x, y);
     this.x = width / 1.5;
     this.y = height / 1.5;
+    this.font = buttonFont;
     this.w = 175;
     this.h = 100;
   }
@@ -15,7 +16,8 @@ class HowToPlayButton extends Buttons {
     rect(this.x, this.y, this.w, this.h);
     textAlign(CENTER, CENTER);
     textSize(25);
-    fill(75, 0, 130);
+    textFont(this.font);
+    fill(0);
     stroke(0);
     text(`How To Play`, this.x, this.y, this.w, this.h);
     pop();

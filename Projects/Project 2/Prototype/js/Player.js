@@ -35,22 +35,24 @@ class Player {
     }
 
     //Allows player to be more evasive by dashing, has orange gauge display
-    if (keyIsDown(32) && this.dashTime === 60) {
-      this.maxV = 30;
-    } else if (this.dashTime > 0 && this.maxV === 30) {
+    if (keyIsDown(32) && this.dashTime === 60 && this.MaxV === 9) {
+      this.accel = 8;
+      this.MaxV = 16;
+    } else if (this.dashTime > 0 && this.MaxV === 16) {
       this.dashTime--;
     }
 
     if (this.dashTime === 0) {
-      this.maxV = 9;
-      this.dashTime = 60;
+      this.accel = 3;
+      this.MaxV = 9;
+      this.dashTime = frameCount = 60;
     }
 
     push();
     let w = abs(this.dashTime - 30);
     fill(150, 150, 75);
     rectMode(CENTER);
-    rect(width / 2, 50, w * 2, 25);
+    rect(width / 2, 50, w * 4, 25);
     pop();
 
     //Allows for smoother WASD movement.
@@ -86,7 +88,7 @@ class Player {
     }
 
     if (this.x > mouseX) {
-      scale(-1, 1);
+      image(playerArmImg, 0, 0, this.size, this.size);
     } else {
       image(playerArmImg, 0, 0, this.size, this.size);
     }

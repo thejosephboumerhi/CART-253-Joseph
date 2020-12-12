@@ -11,6 +11,7 @@ class HybridEnemy {
     this.MaxV = 6;
     this.friction = 0.95;
     this.active = true;
+    this.gattlingSpeed = 0;
     //Later I will need to make a class + inheritance for various enemies
   }
 
@@ -64,9 +65,6 @@ class HybridEnemy {
     if (tx > 0) {
       angle += PI;
     }
-
-    //if ((rateOfFire = 45)) {
-    //}
 
     let enemyProjectile = new EnemyProjectile(x, y, angle);
 

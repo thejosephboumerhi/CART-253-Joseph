@@ -2,7 +2,7 @@
 Project 2: Prototype --- Neo-Tenebris
 Joseph Boumerhi
 
-Prototyping of a TDP shooter
+A TDP shooter
 **************************************************/
 `use strict`;
 //Starting state, the main menu
@@ -11,7 +11,7 @@ let state = `title`;
 //Player Variable
 let player;
 
-//Font Variable
+//Font Variables
 let startEndFont;
 let buttonFont;
 let howToPlayFont;
@@ -26,13 +26,14 @@ Use Mouse to look around, and left click to shoot`;
 //Enemy array, two spawn
 let enemyGroup = [];
 let enemyNum = 2;
-//For spawning
+//For spawning (overhauled)
+//numDead = 0;
 
-//Player projectile array, semi-auto firing
+//Player projectile array, semi-auto firing, and fast moving shots
 let projectileOut = [];
 let projectileShot = 1;
 
-//Enemy projectile array, slow firing
+//Enemy projectile array, fast firing and slow moving shots
 let enemyProjectileOut = [];
 let enemyProjectileShot = 1;
 
@@ -194,6 +195,7 @@ function gameplay() {
       }
     }
 
+    //Lets the enemy projectile have its properties when it's being fired
     for (let e = enemyProjectileOut.length - 1; e >= 0; e--) {
       let enemyProjectile = enemyProjectileOut[e];
       enemyProjectile.projectile(player);

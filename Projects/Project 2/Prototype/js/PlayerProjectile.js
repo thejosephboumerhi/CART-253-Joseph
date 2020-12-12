@@ -5,7 +5,7 @@ class PlayerProjectile {
     this.y = y;
     this.vx = 2;
     this.vy = 2;
-    this.speed = 2;
+    this.speed = 10;
     this.size = 30;
     this.angle = angle;
     this.fired = true;
@@ -31,6 +31,7 @@ class PlayerProjectile {
     this.x += this.vx;
     this.y += this.vy;
 
+    //If the projectile leaves the canvas, destroy itself
     if (this.x > width) {
       this.active = false;
     } else if (this.y > height) {

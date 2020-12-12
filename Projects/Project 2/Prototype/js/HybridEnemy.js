@@ -1,5 +1,5 @@
 //Now fulfills both the roles of a melee and ranged enemy, and is very
-//threating, even if there is only one of them
+//threating, even if there is only one of them. (Used to be MeleeEnemy).
 class HybridEnemy {
   constructor(x, y) {
     this.x = x;
@@ -14,11 +14,10 @@ class HybridEnemy {
     this.friction = 0.95;
     this.active = true;
     this.gattlingSpeed = 0;
-    //Later I will need to make a class + inheritance for various enemies
   }
 
-  //Shows orb-like enemies, instead of the supposed meleeEnemyImg, since it
-  //just looks better in comparison
+  //Shows orb-like enemies, instead of the supposed meleeEnemyImg
+  //I put the rangedEnemyImg, since it just looks better in comparison
   display() {
     push();
     imageMode(CENTER);
@@ -26,7 +25,8 @@ class HybridEnemy {
     pop();
   }
 
-  //Lets the enemy chase the player, decided to give accel and friction too
+  //Lets the enemy chase the player, decided to just give it
+  //accel and friction too
   chase() {
     let cx = this.x - player.x;
     let cy = this.y - player.y;
@@ -72,10 +72,11 @@ class HybridEnemy {
     }
 
     //Instead of the enemy spraying bullets every frame, it shoots
-    //every 5 frames continuously, it sprays a wall of them, so it makes you
-    //want move out of the way
+    //every 3 frames, it sprays a wall of them, so it makes you
+    //want to move out of the way. Dana helped me discover %, and showed me how
+    //it works.
 
-    if (this.gattlingSpeed % 5 === 0) {
+    if (this.gattlingSpeed % 3 === 0) {
       let enemyProjectile = new EnemyProjectile(x, y, angle);
       enemyProjectile.speed;
       enemyProjectileOut.push(enemyProjectile);
@@ -91,7 +92,7 @@ class HybridEnemy {
       player.invinciTime < frameCount
     ) {
       player.healthPercent -= 40;
-      player.invinciTime = frameCount + 15;
+      player.invinciTime = frameCount + 30;
     }
   }
 }

@@ -1,3 +1,4 @@
+//Essentially the player that is controlled by using WASD, and mouse to shoot
 class Player {
   constructor(x, y) {
     this.x = 0;
@@ -11,7 +12,6 @@ class Player {
     this.MaxV = 9;
     this.friction = 0.9;
     this.healthPercent = 100;
-    this.healthRegen = 20;
     this.invinciTime = 0;
     this.dashTime = 0;
     this.triggerSpeed = 0;
@@ -49,9 +49,11 @@ class Player {
     if (this.dashTime === 0) {
       this.accel = 3;
       this.MaxV = 9;
-      this.dashTime + 60;
+      this.dashTime = 60;
     }
 
+    //Similar to the health, the * lets it look even bigger, so they aren't
+    //awkwardly small in comparison the large canvas
     push();
     let w = abs(this.dashTime - 30);
     fill(150, 150, 75);
@@ -78,8 +80,8 @@ class Player {
     imageMode(CENTER);
     translate(this.x, this.y);
 
-    //Faces the "Standing" and "Running" playerImgs in direction of mouseX, new playerImg,
-    //thanks to Samuel's assistance
+    //Faces the "Standing" and "Running" playerImgs in direction of mouseX,
+    //new playerImg, thanks to Samuel's assistance
     if (this.x > mouseX) {
       scale(-1, 1);
     }
@@ -112,6 +114,8 @@ class Player {
 
   //Health system, game overs when it reaches 0%, has green gauge display
   //the *4 doesn't affect the percent, but enlarges the gauge
+  //Sam helped confirm how things should be set up for health, had the idea,
+  //just wondered what values and statements were needed
   health() {
     if (this.healthPercent <= 0) {
       state = `endGame`;
@@ -123,8 +127,6 @@ class Player {
       this.healthPercent++;
     }
 
-    //Similar to the health, the * lets it look even bigger, so they aren't
-    //awkward;y small in comparison the large canvas
     push();
     fill(100, 200, 100);
     rectMode(CENTER);
@@ -150,7 +152,7 @@ class Player {
 
     let projectile = new PlayerProjectile(x, y, angle);
 
-    projectile.speed = 10;
+    projectile.speed;
     projectileOut.push(projectile);
   }
 

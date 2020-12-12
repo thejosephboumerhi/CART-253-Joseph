@@ -1,4 +1,4 @@
-//
+//Child button that display and has its text, colors, and alignment
 class PlayButton extends Buttons {
   constructor(x, y) {
     super(x, y);
@@ -9,6 +9,7 @@ class PlayButton extends Buttons {
     this.h = 100;
   }
 
+  //Yellow "Play" button
   displayButton() {
     super.displayButton();
     push();

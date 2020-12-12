@@ -1,4 +1,4 @@
-//
+//Child button that display and has its text, colors, and alignment
 class BackToTitleButton extends Buttons {
   constructor(x, y) {
     super(x, y);
@@ -9,6 +9,7 @@ class BackToTitleButton extends Buttons {
     this.h = 100;
   }
 
+  //Green "back" button
   displayButton() {
     super.displayButton();
     push();

@@ -1,4 +1,5 @@
-//Reused PlayerProjectile, adjusted values and
+//Reused PlayerProjectile, adjusted values, and change some variable, so it
+//would work for the enemy (Could've maybe been a child class?)
 class EnemyProjectile {
   constructor(x, y, angle) {
     this.x = x;
@@ -19,7 +20,7 @@ class EnemyProjectile {
     if (this.fired && damage < this.size / 2 + player.size / 2) {
       //Hurt the player
       player.healthPercent -= 15;
-      player.invinciTime = frameCount + 60;
+      player.invinciTime = frameCount + 30;
       this.active = false;
     }
   }

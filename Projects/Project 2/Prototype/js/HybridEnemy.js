@@ -1,3 +1,5 @@
+//Now fulfills both the roles of a melee and ranged enemy, and is very
+//threating, even if there is only one of them
 class HybridEnemy {
   constructor(x, y) {
     this.x = x;
@@ -15,14 +17,16 @@ class HybridEnemy {
     //Later I will need to make a class + inheritance for various enemies
   }
 
-  //Shows ghost-like enemies
+  //Shows orb-like enemies, instead of the supposed meleeEnemyImg, since it
+  //just looks better in comparison
   display() {
     push();
-    image(meleeEnemyImg, this.x, this.y, this.size, this.size);
+    imageMode(CENTER);
+    image(rangedEnemyImg, this.x, this.y, this.size, this.size);
     pop();
   }
 
-  //Lets enemy chase player, decided to give accel and friction too
+  //Lets the enemy chase the player, decided to give accel and friction too
   chase() {
     let cx = this.x - player.x;
     let cy = this.y - player.y;
@@ -52,12 +56,13 @@ class HybridEnemy {
   }
 
   enemyTargeting() {
+    //The same as the player, but it targets them instead
     //Shoots from enemy position
     let x = this.x;
     let y = this.y;
 
     //Takes player.x and player.y values, and lets it be used for angle/degrees,
-    //so it can shoot the player
+    //exactly like weaponAim(), except it targets the player
     let tx = x - player.x;
     let ty = y - player.y;
     let angle = atan(ty / tx);
@@ -66,21 +71,27 @@ class HybridEnemy {
       angle += PI;
     }
 
-    let enemyProjectile = new EnemyProjectile(x, y, angle);
+    //Instead of the enemy spraying bullets every frame, it shoots
+    //every 5 frames continuously, it sprays a wall of them, so it makes you
+    //want move out of the way
 
-    enemyProjectile.speed = 3;
-    enemyProjectileOut.push(enemyProjectile);
+    if (this.gattlingSpeed % 5 === 0) {
+      let enemyProjectile = new EnemyProjectile(x, y, angle);
+      enemyProjectile.speed;
+      enemyProjectileOut.push(enemyProjectile);
+    }
+    this.gattlingSpeed++;
   }
 
-  //Get hit, game over (will likely be modified when I work on health later)
+  //Hurts the player when overlaping, does high instant damage
   attackOverlap() {
     let a = dist(player.x, player.y, this.x, this.y);
     if (
       a < this.size / 2 + player.size / 2 &&
       player.invinciTime < frameCount
     ) {
-      player.healthPercent -= 35;
-      player.invinciTime = frameCount + 10;
+      player.healthPercent -= 40;
+      player.invinciTime = frameCount + 15;
     }
   }
 }

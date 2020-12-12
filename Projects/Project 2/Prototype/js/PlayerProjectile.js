@@ -20,7 +20,6 @@ class PlayerProjectile {
       enemy.active = false;
       this.active = false;
       this.fired = false;
-      numDead++;
     }
   }
 

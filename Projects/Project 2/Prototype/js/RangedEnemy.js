@@ -1,3 +1,5 @@
+//Overhauled this, thought that them spawning on top of a melee enemy would
+//make the game begin to slow down (a lot of clutter, frame drops)
 class RangedEnemy {
   constructor(x, y) {
     this.x = x;
@@ -66,8 +68,6 @@ class RangedEnemy {
       angle += PI;
     }
 
-    //if ((rateOfFire = 45)) {
-    //}
     let enemyProjectile = new EnemyProjectile(x, y, angle);
 
     enemyProjectile.speed = 3;

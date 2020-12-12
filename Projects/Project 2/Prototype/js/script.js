@@ -27,8 +27,6 @@ Use Mouse to look around, and left click to shoot`;
 let enemyGroup = [];
 let enemyNum = 2;
 //For spawning
-let numDead = 0;
-let numAlive = 0;
 
 //Player projectile array, semi-auto firing
 let projectileOut = [];
@@ -61,13 +59,16 @@ function preload() {
   howToPlayFont = loadFont("assets/fonts/VCR_OSD_MONO_1.001.ttf");
 
   //Pixel Sprites
+  //For the player
   playerImg = loadImage("assets/images/PlayerCharacterStanding.png");
   playerRunImg = loadImage("assets/images/PlayerCharacterRunning.gif");
   playerArmImg = loadImage("assets/images/WeaponArm.png");
   playerShotImg = loadImage("assets/images/UserBullet.gif");
   cursorImg = loadImage("assets/images/CursorV2.png");
+  //For aesthetic
   titleImg = loadImage("assets/images/Neo-Tenebris.png");
   backgroundImg = loadImage("assets/images/Arena.gif");
+  //For the enemy/enemies
   meleeEnemyImg = loadImage("assets/images/MeleeEnemy.gif");
   rangedEnemyImg = loadImage("assets/images/RangedEnemy.gif");
   enemyShotImg = loadImage("assets/images/EnemyBullet.gif");
@@ -84,7 +85,7 @@ function setup() {
     let enemy = new HybridEnemy(x, y);
     enemyGroup.push(enemy);
   }
-
+  //Setups the buttons once, to save resources (Dana I think told me this)
   button = new Buttons();
   play = new PlayButton();
   howToPlay = new HowToPlayButton();
@@ -95,7 +96,8 @@ function setup() {
 function draw() {
   background(175, 150, 150);
 
-  //Different states, and backgrounds running first to be in back layer
+  //Different states, and backgrounds running first to be in back layer,
+  //otherwise it would overlap and you wouldn't see anything
   if (state === `title`) {
     background(0);
     cursor();
@@ -117,7 +119,8 @@ function draw() {
 
 //The usual text for the states
 //Displays the title name, and a icon of the OC (the player character) for this
-//
+//game, the titleImg was also done for a graphic design, and that teacher really
+//like the look of it
 function title() {
   push();
   imageMode(LEFT, CENTER);
@@ -132,7 +135,7 @@ function title() {
   pop();
 }
 
-//
+//Display the instructions on how to play
 function htp() {
   push();
   textSize(30);
@@ -158,7 +161,8 @@ function gameOver() {
   pop();
 }
 
-//Game starts, player could now play, enemies spawn, shots could be fired
+//Game starts in "inGame" state, player could now play, enemy spawns over
+//and attack.
 function gameplay() {
   player.movementInput();
   player.health();
@@ -167,8 +171,8 @@ function gameplay() {
   player.border();
   waveSpawn();
 
-  //Lets each enemy have their properties, and at least an ability of continuing
-  //to spawn
+  //Lets the spawned enemy have their properties, and at least an ability of
+  //continuing to spawn
   for (let i = 0; i < enemyGroup.length; i++) {
     let enemy = enemyGroup[i];
     if (enemy.active) {
@@ -180,7 +184,7 @@ function gameplay() {
       enemy.enemyTargeting();
     }
 
-    //Lets each projectile have its properties
+    //Lets the projectile have its properties when it's being fired
     for (let j = projectileOut.length - 1; j >= 0; j--) {
       let projectile = projectileOut[j];
       projectile.projectile(enemy);
@@ -200,10 +204,8 @@ function gameplay() {
     }
   }
 }
-//}
 
-//Temporary spawn system, progress showing that "a spawn" is working, and will
-//be further updated
+//Spawn system
 function waveSpawn() {
   for (let i = enemyGroup.length - 1; i > 0; i--) {
     let enemy = enemyGroup[i];
@@ -214,8 +216,6 @@ function waveSpawn() {
       let enemy = new HybridEnemy(x, y);
       enemyGroup.push(enemy);
     }
-    //Splice is necessary, since the game seemed to start slowing after "killing"
-    //a couple of enemies using the temporary spawn system.
   }
 }
 
@@ -224,6 +224,7 @@ function mousePressed() {
   //Allows for the buttons to be used, alongside the state they change to when
   //pressed on.
 
+  //The play button to start the game
   if (
     mouseX > play.x &&
     mouseX < play.x + play.w &&
@@ -232,9 +233,9 @@ function mousePressed() {
     state === `title`
   ) {
     state = `inGame`;
-    console.log("PLAYING!");
   }
 
+  //The button to look at the instructions
   if (
     mouseX > howToPlay.x &&
     mouseX < howToPlay.x + howToPlay.w &&
@@ -243,8 +244,9 @@ function mousePressed() {
     state === `title`
   ) {
     state = `howToPlay`;
-    console.log("Learning!");
   }
+
+  //A "back" button, so you can move back to the menu and play
   if (
     mouseX > backToMenu.x &&
     mouseX < backToMenu.x + backToMenu.w &&
@@ -253,8 +255,8 @@ function mousePressed() {
     state === `howToPlay`
   ) {
     state = `title`;
-    console.log("Back to menu!");
   } else if (state === `inGame`) {
+    //Allows the player to shoot when it is the "inGame" state
     player.weaponAim();
   }
 }

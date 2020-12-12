@@ -2,7 +2,7 @@ class Player {
   constructor(x, y) {
     this.x = 0;
     this.y = 0;
-    this.size = 80;
+    this.size = 70;
     this.vx = 0;
     this.vy = 0;
     this.ax = 0;
@@ -14,6 +14,7 @@ class Player {
     this.healthRegen = 20;
     this.invinciTime = 0;
     this.dashTime = 0;
+    this.triggerSpeed = 0;
   }
 
   //Lets player move efficiently
@@ -34,18 +35,21 @@ class Player {
       this.ay = 0;
     }
 
-    //Allows player to be more evasive by dashing, has orange gauge display
+    //Allows player to be more evasive by dashing, by boosting accel and MaxV
+    //has orange gauge display
     if (keyIsDown(32) && this.dashTime === 60 && this.MaxV === 9) {
       this.accel = 8;
       this.MaxV = 16;
     } else if (this.dashTime > 0 && this.MaxV === 16) {
+      //Burns the gauge as you dash
       this.dashTime--;
     }
 
+    //Refills the gauge
     if (this.dashTime === 0) {
       this.accel = 3;
       this.MaxV = 9;
-      this.dashTime = frameCount = 60;
+      this.dashTime + 60;
     }
 
     push();
@@ -87,6 +91,8 @@ class Player {
       image(playerImg, 0, 0, this.size, this.size);
     }
 
+    //Same, it runs after the above image to overlap, and flips when looking
+    //around.
     if (this.x > mouseX) {
       image(playerArmImg, 0, 0, this.size, this.size);
     } else {
@@ -95,7 +101,7 @@ class Player {
     pop();
   }
 
-  //Shows custom cursor, hides
+  //Shows custom cursor, hides the usual cursor when "inGame"
   cursor() {
     push();
     noCursor();
@@ -111,9 +117,14 @@ class Player {
       state = `endGame`;
     }
 
+    //If under 100%, you heal rapidly, but the enemy hits fairly hard and there's a
+    //lot of bullets flying
     if (this.healthPercent < 100) {
       this.healthPercent++;
     }
+
+    //Similar to the health, the * lets it look even bigger, so they aren't
+    //awkward;y small in comparison the large canvas
     push();
     fill(100, 200, 100);
     rectMode(CENTER);
@@ -122,7 +133,6 @@ class Player {
   }
 
   //Pushes and lets you shoot bullets, it now works, thanks to Pippin's help
-  //Will introduce frameCount to not allow the player to spam shots.
   weaponAim() {
     //Shoots from player position
     let x = this.x;
@@ -138,8 +148,6 @@ class Player {
       angle += PI;
     }
 
-    //if ((rateOfFire = 45)) {
-    //}
     let projectile = new PlayerProjectile(x, y, angle);
 
     projectile.speed = 10;

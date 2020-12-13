@@ -89,8 +89,8 @@ function setup() {
   //Setups the buttons once, to save resources (Dana I think told me this)
   button = new Buttons();
   play = new PlayButton();
-  howToPlayPress = new HowToPlayButton();
-  backToMenuPress = new BackToTitleButton();
+  howToPlay = new HowToPlayButton();
+  backToMenu = new BackToTitleButton();
 }
 
 //Starts with title, then gameplay, finally GameOver
@@ -104,11 +104,11 @@ function draw() {
     cursor();
     title();
     play.displayButton();
-    howToPlayPress.displayButton();
+    howToPlay.displayButton();
   } else if (state === `howToPlay`) {
     background(0);
     htp();
-    backToMenuPress.displayButton();
+    backToMenu.displayButton();
   } else if (state === `inGame`) {
     background(backgroundImg);
     gameplay();
@@ -239,10 +239,10 @@ function mousePressed() {
 
   //The button to look at the instructions
   if (
-    mouseX > howToPlayPress.x &&
-    mouseX < howToPlayPress.x + howToPlayPress.w &&
-    mouseY > howToPlayPress.y &&
-    mouseY < howToPlayPress.y + howToPlayPress.h &&
+    mouseX > howToPlay.x &&
+    mouseX < howToPlay.x + howToPlay.w &&
+    mouseY > howToPlay.y &&
+    mouseY < howToPlay.y + howToPlay.h &&
     state === `title`
   ) {
     state = `howToPlay`;
@@ -250,10 +250,10 @@ function mousePressed() {
 
   //A "back" button, so you can move back to the menu and play
   if (
-    mouseX > backToMenuPress.x &&
-    mouseX < backToMenuPress.x + backToMenuPress.w &&
-    mouseY > backToMenuPress.y &&
-    mouseY < backToMenuPress.y + backToMenuPress.h &&
+    mouseX > backToMenu.x &&
+    mouseX < backToMenu.x + backToMenu.w &&
+    mouseY > backToMenu.y &&
+    mouseY < backToMenu.y + backToMenu.h &&
     state === `howToPlay`
   ) {
     state = `title`;
